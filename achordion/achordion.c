@@ -145,7 +145,7 @@ static void settle_as_tap(void) {
   recursively_process_record(&tap_hold_record, STATE_TAPPING);
 }
 
-bool process_achordion(uint16_t keycode, keyrecord_t* record) {
+bool process_record_achordion(uint16_t keycode, keyrecord_t* record) {
   // Don't process events that Achordion generated.
   if (achordion_state == STATE_RECURSING) {
     return true;
