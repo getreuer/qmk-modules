@@ -18,9 +18,10 @@ This repo uses the Apache License 2.0 except where otherwise indicated. See the
 
 ## Community modules
 
-| Module                            | Description                                           |
-|-----------------------------------|-------------------------------------------------------|
-| [Achordion](./achordion/)         | Customize the tap-hold decision.                      |
+| Module                                    | Description                                           |
+|-------------------------------------------|-------------------------------------------------------|
+| [achordion](./achordion/)                 | Customize the tap-hold decision.                      |
+| [custom_shift_keys](./custom_shift_keys/) | Customize what keycode is produced when shifted.      |
 
 TODO: More to come...
 
@@ -50,8 +51,7 @@ to get the latest.
    Userspace](https://docs.qmk.fm/newbs_external_userspace), replace the first
    line with `cd /path/to/your/external/userspace`.
 
-2. Activate a module in your keymap by writing a file `keymap.json` with the
-   content
+2. Add a module in your keymap by writing a file `keymap.json` with the content
 
    ```json
    {
@@ -59,7 +59,7 @@ to get the latest.
    }
    ```
    
-   Or activate multiple modules like:
+   Or add multiple modules like:
    
    ```json
    {
@@ -69,13 +69,8 @@ to get the latest.
 
 3. Follow the module's documentation for further instruction on how to use it.
 
-4. Whenever changing modules, run this shell command to ensure a clean build:
-
-   ```sh
-   qmk clean
-   ```
-
-   Then compile and flash as usual.
+4. Compile and flash as usual. If there are build errors, try running `qmk
+   clean` and compiling again for a clean build.
 
 
 ### Uninstall instructions
