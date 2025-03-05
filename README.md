@@ -23,6 +23,7 @@ This repo uses the Apache License 2.0 except where otherwise indicated. See the
 | [achordion](./achordion/)                 | Customize the tap-hold decision.                      |
 | [custom_shift_keys](./custom_shift_keys/) | Customize what keycode is produced when shifted.      |
 | [keycode_string](./keycode_string/)       | Format QMK keycodes as human-readable strings.        |
+| [select_word](./select_word/)             | Convenient word and line selection.                   |
 
 TODO: More to come...
 
