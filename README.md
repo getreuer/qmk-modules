@@ -18,7 +18,11 @@ This repo uses the Apache License 2.0 except where otherwise indicated. See the
 
 ## Community modules
 
-TODO: List modules here...
+| Module                            | Description                                           |
+|-----------------------------------|-------------------------------------------------------|
+| [Achordion](./achordion/)         | Customize the tap-hold decision.                      |
+
+TODO: More to come...
 
 
 ## How to use these modules
@@ -42,22 +46,24 @@ to get the latest.
    git submodule update --init --recursive
    ```
    
-   Or if using [external userspace]() replace the first line with `cd /path/to/your/external/userspace`.
+   Or if using [External
+   Userspace](https://docs.qmk.fm/newbs_external_userspace), replace the first
+   line with `cd /path/to/your/external/userspace`.
 
 2. Activate a module in your keymap by writing a file `keymap.json` with the
    content
 
    ```json
    {
-       "modules": ["getreuer/custom_shift_keys"]
+       "modules": ["getreuer/achordion"]
    }
    ```
    
-   Or activate multiple modules like this:
+   Or activate multiple modules like:
    
    ```json
    {
-       "modules": ["getreuer/custom_shift_keys", "getreuer/sentence_case"]
+       "modules": ["getreuer/achordion", "getreuer/sentence_case"]
    }
    ```
 
