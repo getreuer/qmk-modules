@@ -1,6 +1,7 @@
 # Select Word
 
-This is a community module adaptation of Select Word for selecting words and
+This is a community module adaptation of [Select
+Word](https://getreuer.info/posts/keyboards/select-word) for selecting words and
 lines, assuming conventional text editing hotkeys. 
 
 ## Use

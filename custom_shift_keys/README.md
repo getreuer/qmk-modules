@@ -1,8 +1,9 @@
 # Custom Shift Keys
 
-This is a community module adaptation of Custom Shift Keys, a light alternative
-to QMK's [Key Overrides](https://docs.qmk.fm/features/key_overrides) for
-customizing what keycode is produced when a key is shifted.
+This is a community module adaptation of [Custom Shift
+Keys](https://getreuer.info/posts/keyboards/custom-shift-keys), a light
+alternative to QMK's [Key Overrides](https://docs.qmk.fm/features/key_overrides)
+for customizing what keycode is produced when a key is shifted.
 
 Add the following to your `keymap.json` to use Custom Shift Keys:
 
@@ -30,5 +31,5 @@ For instance, the first row defines that when `KC_DOT` is pressed with Shift
 held, keycode `KC_QUES` is sent.
 
 See the [Custom Shift Keys
-documentation](https://getreuer.info/posts/keyboards/custom-shift-keys/index.html)
-for configuration options and further details.
+documentation](https://getreuer.info/posts/keyboards/custom-shift-keys) for
+configuration options and further details.
