@@ -20,7 +20,7 @@
  * <https://getreuer.info/posts/keyboards/custom-shift-keys>
  */
 
-#include "custom_shift_keys.h"
+#include "modules/getreuer/custom_shift_keys/custom_shift_keys.h"
 
 ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 

@@ -20,7 +20,7 @@
  * <https://getreuer.info/posts/keyboards/achordion>
  */
 
-#include "achordion.h"
+#include "modules/getreuer/achordion/achordion.h"
 
 #pragma message \
     "Achordion has evolved into core QMK feature Chordal Hold! To use it, update your QMK set up and see https://docs.qmk.fm/tap_hold#chordal-hold"

@@ -24,7 +24,7 @@
  * <https://getreuer.info/posts/keyboards/keycode-string>
  */
 
-#include "keycode_string.h"
+#include "modules/getreuer/keycode_string/keycode_string.h"
 
 #include <string.h>
 

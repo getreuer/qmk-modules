@@ -20,7 +20,7 @@
  * <https://getreuer.info/posts/keyboards/select-word>
  */
 
-#include "select_word.h"
+#include "modules/getreuer/select_word/select_word.h"
 
 ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 

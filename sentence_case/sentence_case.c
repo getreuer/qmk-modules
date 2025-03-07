@@ -20,7 +20,7 @@
  * <https://getreuer.info/posts/keyboards/sentence-case>
  */
 
-#include "sentence_case.h"
+#include "modules/getreuer/sentence_case/sentence_case.h"
 
 #include <string.h>
 
