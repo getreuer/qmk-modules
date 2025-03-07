@@ -4,11 +4,12 @@
 
 | Module                                    | Description                                           |
 |-------------------------------------------|-------------------------------------------------------|
-| [achordion](./achordion/)                 | Customize the tap-hold decision.                      |
-| [custom_shift_keys](./custom_shift_keys/) | Customize what keycode is produced when shifted.      |
-| [keycode_string](./keycode_string/)       | Format QMK keycodes as human-readable strings.        |
-| [select_word](./select_word/)             | Convenient word and line selection.                   |
-| [sentence_case](./sentence_case/)         | Automatically capitalize sentences.                   |
+| [Achordion](./achordion/)                 | Customize the tap-hold decision.                      |
+| [Custom Shift Keys](./custom_shift_keys/) | Customize what keycode is produced when shifted.      |
+| [Keycode String](./keycode_string/)       | Format QMK keycodes as human-readable strings.        |
+| [PaletteFx](./palettefx/)                 | Palette-based animated RGB matrix lighting effects.   |
+| [Select Word](./select_word/)             | Convenient word and line selection.                   |
+| [Sentence Case](./sentence_case/)         | Automatically capitalize sentences.                   |
 
 TODO: More to come...
 
