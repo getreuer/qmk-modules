@@ -12,6 +12,7 @@
 | [PaletteFx](./palettefx/)                 | Palette-based animated RGB matrix lighting effects.   |
 | [Select Word](./select_word/)             | Convenient word and line selection.                   |
 | [Sentence Case](./sentence_case/)         | Automatically capitalize sentences.                   |
+| [SOCD Cleaner](./socd_cleaner/)           | SOCD filtering for fast gaming inputs.                |
 
 
 ## What is this?
