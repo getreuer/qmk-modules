@@ -1,5 +1,15 @@
 # PaletteFx
 
+<table>
+<tr><td><b>Module</b></td><td><tt>getreuer/palettefx</tt></td></tr>
+<tr><td><b>Version</b></td><td>20250307</td></tr>
+<tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
+<tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
+<tr><td><b>Documentation</b></td><td>
+<a href="https://getreuer.info/posts/keyboards/palettefx">https://getreuer.info/posts/keyboards/palettefx</a>
+</td></tr>
+</table>
+
 This is a community module adaptation of
 [PaletteFx](https://getreuer.info/posts/keyboards/palettefx) for colorful
 palette-based RGB matrix effects. While most of QMK's built-in RGB matrix

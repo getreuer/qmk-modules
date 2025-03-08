@@ -13,8 +13,6 @@
 | [Select Word](./select_word/)             | Convenient word and line selection.                   |
 | [Sentence Case](./sentence_case/)         | Automatically capitalize sentences.                   |
 
-TODO: More to come...
-
 
 ## What is this?
 

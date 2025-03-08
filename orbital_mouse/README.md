@@ -1,5 +1,15 @@
 # Orbital Mouse
 
+<table>
+<tr><td><b>Module</b></td><td><tt>getreuer/orbital_mouse</tt></td></tr>
+<tr><td><b>Version</b></td><td>20250307</td></tr>
+<tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
+<tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
+<tr><td><b>Documentation</b></td><td>
+<a href="https://getreuer.info/posts/keyboards/orbital-mouse">https://getreuer.info/posts/keyboards/orbital-mouse</a>
+</td></tr>
+</table>
+
 This is a community module adaptation of [Orbital
 Mouse](https://getreuer.info/posts/keyboards/orbital-mouse) for a polar approach
 to mouse control. Orbital Mouse replaces QMK Mouse Keys. The pointer moves

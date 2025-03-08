@@ -1,5 +1,15 @@
 # Custom Shift Keys
 
+<table>
+<tr><td><b>Module</b></td><td><tt>getreuer/custom_shift_keys</tt></td></tr>
+<tr><td><b>Version</b></td><td>20250307</td></tr>
+<tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
+<tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
+<tr><td><b>Documentation</b></td><td>
+<a href="https://getreuer.info/posts/keyboards/custom-shift-keys">https://getreuer.info/posts/keyboards/custom-shift-keys</a>
+</td></tr>
+</table>
+
 This is a community module adaptation of [Custom Shift
 Keys](https://getreuer.info/posts/keyboards/custom-shift-keys), a light
 alternative to QMK's [Key Overrides](https://docs.qmk.fm/features/key_overrides)

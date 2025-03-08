@@ -1,5 +1,15 @@
 # Keycode String
 
+<table>
+<tr><td><b>Module</b></td><td><tt>getreuer/keycode_string</tt></td></tr>
+<tr><td><b>Version</b></td><td>20250307</td></tr>
+<tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
+<tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
+<tr><td><b>Documentation</b></td><td>
+<a href="https://getreuer.info/posts/keyboards/keycode-string">https://getreuer.info/posts/keyboards/keycode-string</a>
+</td></tr>
+</table>
+
 This is a community module adaptation of [Keycode
 String](https://getreuer.info/posts/keyboards/keycode-string), a utility to
 convert QMK keycodes to human-readable strings. It's much nicer to read names
