@@ -25,9 +25,7 @@
 ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 
 // Defined in introspection.c.
-uint16_t custom_shift_keys_count_raw(void);
 uint16_t custom_shift_keys_count(void);
-const custom_shift_key_t* custom_shift_keys_get_raw(uint16_t index);
 const custom_shift_key_t* custom_shift_keys_get(uint16_t index);
 
 bool process_record_custom_shift_keys(uint16_t keycode, keyrecord_t *record) {
