@@ -24,6 +24,11 @@
 
 ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 
+// Default to a timeout of 5 seconds.
+#ifndef SELECT_WORD_TIMEOUT
+#  define SELECT_WORD_TIMEOUT  5000
+#endif  // SELECT_WORD_TIMEOUT
+
 static int8_t selection_dir = 0;
 static bool reset_before_next_event = false;
 static uint8_t registered_hotkey = KC_NO;
