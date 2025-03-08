@@ -33,6 +33,11 @@
 
 ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 
+// Default to a timeout of 5 seconds.
+#ifndef SENTENCE_CASE_TIMEOUT
+#  define SENTENCE_CASE_TIMEOUT 5000
+#endif  // SENTENCE_CASE_TIMEOUT
+
 // Number of keys of state history to retain for backspacing.
 #define STATE_HISTORY_SIZE 6
 
