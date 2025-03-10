@@ -20,7 +20,7 @@
  * <https://getreuer.info/posts/keyboards/orbital-mouse>
  */
 
-#include "modules/getreuer/orbital_mouse/orbital_mouse.h"
+#include "orbital_mouse.h"
 
 #ifndef ORBITAL_MOUSE_RADIUS
 #define ORBITAL_MOUSE_RADIUS 36

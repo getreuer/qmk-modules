@@ -13,5 +13,5 @@
 // limitations under the License.
 
 #pragma once
-#include "modules/getreuer/custom_shift_keys/custom_shift_keys.h"
+#include "custom_shift_keys.h"
 

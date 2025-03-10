@@ -25,7 +25,7 @@
 
 #include <stdint.h>
 #include "color.h"
-#include "modules/getreuer/palettefx/palettefx_default_config.h"
+#include "palettefx_default_config.h"
 
 #ifdef __cplusplus
 extern "C" {

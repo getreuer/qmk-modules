@@ -22,7 +22,7 @@
 
 #ifdef COMMUNITY_MODULE_PALETTEFX_ENABLE
 
-#include "modules/getreuer/palettefx/palettefx_default_config.h"
+#include "palettefx_default_config.h"
 
 #if defined(PALETTEFX_ENABLE_ALL_EFFECTS) || defined(PALETTEFX_GRADIENT_ENABLE)
 RGB_MATRIX_EFFECT(PALETTEFX_GRADIENT)
@@ -46,7 +46,7 @@ RGB_MATRIX_EFFECT(PALETTEFX_REACTIVE)
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
-#include "modules/getreuer/palettefx/palettefx.h"
+#include "palettefx.h"
 
 #if !(defined(PALETTEFX_ENABLE_ALL_EFFECTS) || \
       defined(PALETTEFX_GRADIENT_ENABLE) || \

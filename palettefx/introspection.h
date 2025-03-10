@@ -13,5 +13,5 @@
 // limitations under the License.
 
 #pragma once
-#include "modules/getreuer/palettefx/palettefx.h"
+#include "palettefx.h"
 

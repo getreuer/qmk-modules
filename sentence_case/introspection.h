@@ -13,5 +13,5 @@
 // limitations under the License.
 
 #pragma once
-#include "modules/getreuer/sentence_case/sentence_case.h"
+#include "sentence_case.h"
 

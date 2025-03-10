@@ -13,5 +13,5 @@
 // limitations under the License.
 
 #pragma once
-#include "modules/getreuer/select_word/select_word.h"
+#include "select_word.h"
 

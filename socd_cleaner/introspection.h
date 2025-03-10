@@ -13,5 +13,5 @@
 // limitations under the License.
 
 #pragma once
-#include "modules/getreuer/socd_cleaner/socd_cleaner.h"
+#include "socd_cleaner.h"
 

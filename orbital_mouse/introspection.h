@@ -13,5 +13,5 @@
 // limitations under the License.
 
 #pragma once
-#include "modules/getreuer/orbital_mouse/orbital_mouse.h"
+#include "orbital_mouse.h"
 

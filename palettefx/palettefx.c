@@ -20,7 +20,7 @@
  * <https://getreuer.info/posts/keyboards/palettefx>
  */
 
-#include "modules/getreuer/palettefx/palettefx.h"
+#include "palettefx.h"
 #include "quantum.h"
 
 #include <lib/lib8tion/lib8tion.h>

@@ -33,7 +33,7 @@ Then in your keymap folder, create a file `rgb_matrix_user.inc` with the
 following content, or if it already exists, add this as the first line:
 
 ```c
-#include "modules/getreuer/palettefx/palettefx.inc"
+#include "palettefx.inc"
 ```
 
 ## Using PaletteFx

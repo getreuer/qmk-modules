@@ -20,7 +20,7 @@
  * <https://getreuer.info/posts/keyboards/socd-cleaner>
  */
 
-#include "modules/getreuer/socd_cleaner/socd_cleaner.h"
+#include "socd_cleaner.h"
 
 ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 
