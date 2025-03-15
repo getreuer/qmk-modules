@@ -15,6 +15,7 @@
 | [Select Word](./select_word/)             | Convenient word and line selection.                   |
 | [Sentence Case](./sentence_case/)         | Automatically capitalize sentences.                   |
 | [SOCD Cleaner](./socd_cleaner/)           | SOCD filtering for fast gaming inputs.                |
+| [Tap Flow](./tap_flow/)                   | Disable HRMs during fast typing (Global Quick Tap).   |
 
 
 ## What is this?
