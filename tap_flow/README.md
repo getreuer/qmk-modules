@@ -2,7 +2,7 @@
 
 <table>
 <tr><td><b>Module</b></td><td><tt>getreuer/tap_flow</tt></td></tr>
-<tr><td><b>Version</b></td><td>2025-03-15</td></tr>
+<tr><td><b>Version</b></td><td>2025-03-19</td></tr>
 <tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
 <tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
 <tr><td><b>Documentation</b></td><td>
@@ -11,7 +11,7 @@
 </table>
 
 This module is an implementation of "global quick tap" (GQT), aka "require
-priori idle," for tap-hold keys. It is particularly useful for home row mods to
+prior idle," for tap-hold keys. It is particularly useful for home row mods to
 avoid accidental mod triggers in fast typing.
 
 To use this module, add the following to your `keymap.json`:

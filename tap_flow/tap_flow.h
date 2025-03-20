@@ -17,7 +17,7 @@
  * @brief Tap Flow module: disable HRMs during fast typing
  *
  * This module is an implementation of "global quick tap" (GQT), aka "require
- * priori idle," for tap-hold keys. It is particularly useful for home row mods
+ * prior idle," for tap-hold keys. It is particularly useful for home row mods
  * to avoid accidental mod triggers in fast typing.
  *
  * Tap Flow modifies the tap-hold decision such that when a tap-hold key is

@@ -31,6 +31,7 @@ ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 #error "tap_flow: Please enable Combos (COMBO_ENABLE = true) or Repeat Key (REPEAT_KEY_ENABLE = yes), or both, in rules.mk."
 #else
 
+uint32_t last_input = 0;
 uint16_t g_tap_flow_term = TAP_FLOW_TERM;
 
 static uint16_t prev_keycode = KC_NO;
@@ -96,7 +97,7 @@ bool pre_process_record_tap_flow(uint16_t keycode, keyrecord_t* record) {
     const uint8_t bit_mask = UINT8_C(1) << (index % 8);
 
     if (record->event.pressed) {  // On press.
-      const uint32_t idle_time = last_input_activity_elapsed();
+      const uint32_t idle_time = timer_elapsed32(last_input);
       uint16_t tap_flow_term = get_tap_flow(keycode, record, prev_keycode);
       if (tap_flow_term > 500) {
         tap_flow_term = 500;
@@ -154,6 +155,12 @@ bool pre_process_record_tap_flow(uint16_t keycode, keyrecord_t* record) {
 
   if (record->event.pressed) {  // Track the previous key press.
     prev_keycode = keycode;
+  }
+
+  // Update last input time. Ignore mods and mod-tap keys in this update to
+  // allow for chording multiple mods for hotkeys like "Ctrl+Shift+arrow".
+  if (!IS_MODIFIER_KEYCODE(keycode) && !IS_QK_MOD_TAP(keycode)) {
+    last_input = timer_read32();
   }
 
   return true;
