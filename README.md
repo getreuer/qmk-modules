@@ -77,7 +77,7 @@ file `keymap.json` in your keymap folder with the content
 
 ```json
 {
- "modules": ["getreuer/achordion"]
+  "modules": ["getreuer/tap_flow"]
 }
 ```
 
@@ -86,7 +86,7 @@ multiple modules like:
 
 ```json
 {
- "modules": ["getreuer/achordion", "getreuer/sentence_case"]
+  "modules": ["getreuer/tap_flow", "getreuer/sentence_case"]
 }
 ```
 
