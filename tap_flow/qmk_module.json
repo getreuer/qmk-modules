@@ -1,6 +1,7 @@
 {
     "module_name": "Tap Flow",
     "maintainer": "getreuer",
+    "url": "https://getreuer.info/posts/keyboards/tap-flow",
     "keycodes": [
         {
             "key": "TAP_FLOW_PRINT",

@@ -1,6 +1,7 @@
 {
     "module_name": "Select Word",
     "maintainer": "getreuer",
+    "url": "https://getreuer.info/posts/keyboards/select-word",
     "keycodes": [
         {
             "key": "SELECT_WORD",

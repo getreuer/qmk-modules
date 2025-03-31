@@ -1,6 +1,7 @@
 {
     "module_name": "Orbital Mouse",
     "maintainer": "getreuer",
+    "url": "https://getreuer.info/posts/keyboards/orbital-mouse",
     "features": {
         "mouse": true
     },
