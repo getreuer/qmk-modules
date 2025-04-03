@@ -59,6 +59,15 @@ bool process_record_custom_shift_keys(uint16_t keycode, keyrecord_t *record) {
         && ((1 << layer) & (CUSTOM_SHIFT_KEYS_LAYER_MASK)) != 0
 #endif  // CUSTOM_SHIFT_KEYS_LAYER_MASK
           ) {
+
+      uint16_t base_keycode = keycode;
+      
+      // Handle layer-tap or mod-tap keys when tapped
+      if (IS_QK_LAYER_TAP(keycode) && record->tap.count > 0 && !record->tap.interrupted) {
+          base_keycode = QK_LAYER_TAP_GET_TAP_KEYCODE(keycode);
+      } else if (IS_QK_MOD_TAP(keycode) && record->tap.count > 0 && !record->tap.interrupted) {
+          base_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+      }
       // Continue default handling if this is a tap-hold key being held.
       if ((IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) &&
           record->tap.count == 0) {
@@ -68,7 +77,7 @@ bool process_record_custom_shift_keys(uint16_t keycode, keyrecord_t *record) {
       // Search for a custom shift key whose keycode is `keycode`.
       for (int i = 0; i < (int)custom_shift_keys_count(); ++i) {
         const custom_shift_key_t* custom_shift_key = custom_shift_keys_get(i);
-        if (keycode == custom_shift_key->keycode) {
+        if (base_keycode == custom_shift_key->keycode) {
           registered_keycode = custom_shift_key->shifted_keycode;
           if (IS_QK_MODS(registered_keycode) &&  // Should keycode be shifted?
               (QK_MODS_GET_MODS(registered_keycode) & MOD_LSFT) != 0) {
