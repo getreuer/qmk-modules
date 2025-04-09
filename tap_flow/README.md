@@ -2,7 +2,7 @@
 
 <table>
 <tr><td><b>Module</b></td><td><tt>getreuer/tap_flow</tt></td></tr>
-<tr><td><b>Version</b></td><td>2025-03-19</td></tr>
+<tr><td><b>Version</b></td><td>2025-04-08</td></tr>
 <tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
 <tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
 <tr><td><b>Documentation</b></td><td>
@@ -39,8 +39,9 @@ Tap Flow's default behavior is:
 
 * Filtering is done only when both the tap-hold key and the previous key are
   among <kbd>Space</kbd>, letters <kbd>A</kbd>&ndash;<kbd>Z</kbd>, and
-  punctuations <kbd>,</kbd> <kbd>.</kbd> <kbd>;</kbd> <kbd>/</kbd>. Define the
-  `get_tap_flow()` callback to customize this logic.
+  punctuations <kbd>,</kbd> <kbd>.</kbd> <kbd>;</kbd> <kbd>/</kbd>.
+
+Define the `is_tap_flow_key()` or `get_tap_flow_term()` callbacks to customize.
 
 Tap Flow modifies the tap-hold decision such that when a tap-hold key is pressed
 within a short timeout of the preceding key, the tapping function is used. The
@@ -49,9 +50,10 @@ desired (though perhaps with an exception for Shift or AltGr, noted below),
 whereas the hold functions (mods and layers) are used in isolation, or at least
 with a brief pause preceding the tap-hold key press.
 
-Optionally, the feature can be customized with the `get_tap_flow()` callback. In
-this way, exceptions may be made for Shift and AltGr (or whatever you wish) to
-use a shorter time or to disable filtering for those keys entirely.
+Optionally, the feature can be customized with the `is_tap_flow_key()` and
+`get_tap_flow_term()` callbacks. In this way, exceptions may be made for Shift
+and AltGr (or whatever you wish) to use a shorter time or to disable filtering
+for those keys entirely.
 
 For full documentation, see
 <https://getreuer.info/posts/keyboards/tap-flow>

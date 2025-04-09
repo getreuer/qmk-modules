@@ -183,8 +183,8 @@ bool process_record_tap_flow(uint16_t keycode, keyrecord_t* record) {
   return true;
 }
 
-// Keycode is a "typing" key: Space, A-Z, or main alphas area punctuation.
-static bool is_typing(uint16_t keycode) {
+// By default, enable Tap Flow for Space, A-Z, or main alphas area punctuation.
+__attribute__((weak)) bool is_tap_flow_key(uint16_t keycode) {
   switch (get_tap_keycode(keycode)) {
     case KC_SPC:
     case KC_A ... KC_Z:
@@ -197,15 +197,19 @@ static bool is_typing(uint16_t keycode) {
   return false;
 }
 
-// By default, enable filtering when both the tap-hold key and previous key are
-// typing keys, and use the quick tap term.
+__attribute__((weak)) uint16_t get_tap_flow_term(
+    uint16_t keycode, keyrecord_t* record, uint16_t prev_keycode) {
+  return get_tap_flow(keycode, record, prev_keycode);
+}
+
+// By default, enable filtering when both the tap-hold key and previous key
+// return true for `is_tap_flow_key()`.
 __attribute__((weak)) uint16_t get_tap_flow(
     uint16_t keycode, keyrecord_t* record, uint16_t prev_keycode) {
-  if (!is_typing(keycode) || !is_typing(prev_keycode)) {
-    return 0;
+  if (is_tap_flow_key(keycode) && is_tap_flow_key(prev_keycode)) {
+    return g_tap_flow_term;
   }
-
-  return g_tap_flow_term;
+  return 0;  // Disable Tap Flow.
 }
 
 #endif  // !defined(COMBO_ENABLE) && !defined(REPEAT_KEY_ENABLE)

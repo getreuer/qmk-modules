@@ -49,6 +49,41 @@ extern "C" {
 #endif  // TAP_FLOW_TERM
 
 /**
+ * Optional callback to customize where Tap Flow is enabled.
+ *
+ * Tap Flow is constrained to certain keys by the following rule: this callback
+ * is called for both the tap-hold key *and* the key press immediately preceding
+ * it. If the callback returns true for both keycodes, Tap Flow may apply.
+ *
+ * The default implementation of this callback corresponds to
+ *
+ *     bool is_tap_flow_key(uint16_t keycode) {
+ *       switch (keycode) {
+ *         case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+ *           keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+ *           break;
+ *         case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+ *           keycode = QK_LAYER_TAP_GET_TAP_KEYCODE(keycode);
+ *           break;
+ *       }
+ *       switch (keycode) {
+ *         case KC_SPC:
+ *         case KC_A ... KC_Z:
+ *         case KC_DOT:
+ *         case KC_COMM:
+ *         case KC_SCLN:
+ *         case KC_SLSH:
+ *           return true;
+ *       }
+ *       return false;
+ *     }
+ *
+ * @param keycode Keycode of the key.
+ * @return Whether to enable Tap Flow for this key.
+ */
+bool is_tap_flow_key(uint16_t keycode);
+
+/**
  * Optional callback to customize filtering.
  *
  * Tap Flow acts only when key events are closer together than this time.
@@ -56,11 +91,28 @@ extern "C" {
  * Return a time of 0 to disable filtering. In this way, Tap Flow may be
  * disabled for certain tap-hold keys, or when following certain previous keys.
  *
+ * The default implementation of this callback is
+ *
+ *     uint16_t get_tap_flow_term(uint16_t keycode, keyrecord_t* record,
+ *                                uint16_t prev_keycode) {
+ *       if (is_tap_flow_key(keycode) && is_tap_flow_key(prev_keycode)) {
+ *         return g_tap_flow_term;
+ *       }
+ *       return 0;
+ *     }
+ *
+ * NOTE: If both `is_tap_flow_key()` and `get_tap_flow_term()` are defined, then
+ * `get_tap_flow_term()` takes precedence.
+ *
  * @param keycode Keycode of the tap-hold key.
  * @param record keyrecord_t of the tap-hold event.
  * @param prev_keycode Keycode of the previously pressed key.
- * @return Time in milliseconds.
+ * @return Timeout in milliseconds.
  */
+uint16_t get_tap_flow_term(uint16_t keycode, keyrecord_t* record,
+                           uint16_t prev_keycode);
+
+/** @deprecated Use `get_tap_flow_term()` instead. */
 uint16_t get_tap_flow(uint16_t keycode, keyrecord_t* record,
                       uint16_t prev_keycode);
 
