@@ -12,14 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file lumino.c
+ * @brief Lumino module implementation
+ *
+ * For full documentation, see
+ * <https://getreuer.info/posts/keyboards/lumino>
+ */
+
 #include "lumino.h"
 
 #include <lib/lib8tion/lib8tion.h>
-
-/* #define LUMINO_SOON_TIMEOUT  5000 */
-/* #define LUMINO_LONG_TIMEOUT  20000 */
-/* #define LUMINO_TRANSITION  850 */
-#define LUMINO_BOOT_COLOR RGB_WHITE
 
 // Set default config options where unset.
 #ifndef LUMINO_HIGH_BRIGHTNESS
@@ -48,6 +51,7 @@
 #endif
 
 enum {
+  // Convert values in [0.0, 1.0] to [0, RGB_MATRIX_MAXIMUM_BRIGHTNESS].
   HIGH_BRIGHTNESS = (uint8_t)(
       (((LUMINO_HIGH_BRIGHTNESS) <= 1.0) ? (LUMINO_HIGH_BRIGHTNESS) : 1.0) *
       (RGB_MATRIX_MAXIMUM_BRIGHTNESS) + 0.5),
