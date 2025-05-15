@@ -259,15 +259,6 @@ bool process_record_lumino(uint16_t keycode, keyrecord_t* record) {
       }
       return false;
 
-    case QK_BOOT:
-      if (record->event.pressed) {
-        rgb_matrix_enable_noeeprom();
-        rgb_matrix_set_color_all(LUMINO_BOOT_COLOR);
-        rgb_matrix_update_pwm_buffers();
-        wait_ms(50);  // Wait briefly for PWM to update.
-      }
-      return true;
-
     default:
       if (awake_value > 0) {
         if (!awake || (anim_start_time && anim_end_value == 0)) {
@@ -280,3 +271,11 @@ bool process_record_lumino(uint16_t keycode, keyrecord_t* record) {
   }
 }
 
+bool shutdown_lumino(bool jump_to_bootloader) {
+  if (!shutdown_lumino_kb(jump_to_bootloader)) {
+    rgb_matrix_enable_noeeprom();
+    rgb_matrix_set_color_all(LUMINO_BOOT_COLOR);
+    rgb_matrix_update_pwm_buffers();
+  }
+  return true;
+}
