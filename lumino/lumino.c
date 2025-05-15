@@ -273,9 +273,11 @@ bool process_record_lumino(uint16_t keycode, keyrecord_t* record) {
 
 bool shutdown_lumino(bool jump_to_bootloader) {
   if (!shutdown_lumino_kb(jump_to_bootloader)) {
-    rgb_matrix_enable_noeeprom();
-    rgb_matrix_set_color_all(LUMINO_BOOT_COLOR);
-    rgb_matrix_update_pwm_buffers();
+    return false;
   }
+  rgb_matrix_enable_noeeprom();
+  rgb_matrix_set_color_all(LUMINO_BOOT_COLOR);
+  rgb_matrix_update_pwm_buffers();
+  
   return true;
 }
