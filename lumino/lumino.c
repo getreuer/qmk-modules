@@ -232,6 +232,7 @@ void housekeeping_task_lumino(void) {
     anim_play(ANIM_SLEEP, 0);  // Go to sleep.
   }
 #endif  // USE_SLEEP_TIMER
+  houskeeping_task_lumino_kb();
 }
 
 void keyboard_post_init_lumino(void) {
@@ -240,9 +241,13 @@ void keyboard_post_init_lumino(void) {
     update_current_value(0);
     anim_play(ANIM_WAKE, awake_value);
   }
+  keyboard_post_init_lumino_kb();
 }
 
 bool process_record_lumino(uint16_t keycode, keyrecord_t* record) {
+  if (!process_record_lumino_kb(keycode, recored) {
+    return false;
+  }
 #ifdef USE_SLEEP_TIMER
   event_count = qadd8(event_count, 1);
 #endif  // USE_SLEEP_TIMER
@@ -253,15 +258,6 @@ bool process_record_lumino(uint16_t keycode, keyrecord_t* record) {
         lumino_cycle_3_state();
       }
       return false;
-
-    case QK_BOOT:
-      if (record->event.pressed) {
-        rgb_matrix_enable_noeeprom();
-        rgb_matrix_set_color_all(LUMINO_BOOT_COLOR);
-        rgb_matrix_update_pwm_buffers();
-        wait_ms(50);  // Wait briefly for PWM to update.
-      }
-      return true;
 
     default:
       if (awake_value > 0) {
@@ -275,3 +271,13 @@ bool process_record_lumino(uint16_t keycode, keyrecord_t* record) {
   }
 }
 
+bool shutdown_lumino(bool jump_to_bootloader) {
+  if (!shutdown_lumino_kb(jump_to_bootloader)) {
+    return false;
+  }
+  rgb_matrix_enable_noeeprom();
+  rgb_matrix_set_color_all(LUMINO_BOOT_COLOR);
+  rgb_matrix_update_pwm_buffers();
+  
+  return true;
+}
