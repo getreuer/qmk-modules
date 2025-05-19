@@ -24,6 +24,8 @@
 
 #include <lib/lib8tion/lib8tion.h>
 
+ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
+
 // Set default config options where unset.
 #ifndef LUMINO_HIGH_BRIGHTNESS
 #  define LUMINO_HIGH_BRIGHTNESS 1.0
@@ -232,7 +234,7 @@ void housekeeping_task_lumino(void) {
     anim_play(ANIM_SLEEP, 0);  // Go to sleep.
   }
 #endif  // USE_SLEEP_TIMER
-  houskeeping_task_lumino_kb();
+  housekeeping_task_lumino_kb();
 }
 
 void keyboard_post_init_lumino(void) {
@@ -245,7 +247,7 @@ void keyboard_post_init_lumino(void) {
 }
 
 bool process_record_lumino(uint16_t keycode, keyrecord_t* record) {
-  if (!process_record_lumino_kb(keycode, recored) {
+  if (!process_record_lumino_kb(keycode, record)) {
     return false;
   }
 #ifdef USE_SLEEP_TIMER
@@ -257,7 +259,7 @@ bool process_record_lumino(uint16_t keycode, keyrecord_t* record) {
       if (record->event.pressed) {
         lumino_cycle_3_state();
       }
-      return false;
+      break;
 
     default:
       if (awake_value > 0) {
@@ -267,8 +269,8 @@ bool process_record_lumino(uint16_t keycode, keyrecord_t* record) {
           update_sleep_timer();
         }
       }
-      return true;
   }
+  return true;
 }
 
 bool shutdown_lumino(bool jump_to_bootloader) {
@@ -278,6 +280,6 @@ bool shutdown_lumino(bool jump_to_bootloader) {
   rgb_matrix_enable_noeeprom();
   rgb_matrix_set_color_all(LUMINO_BOOT_COLOR);
   rgb_matrix_update_pwm_buffers();
-  
+
   return true;
 }
