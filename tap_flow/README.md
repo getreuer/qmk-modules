@@ -12,7 +12,8 @@
 
 This module is an implementation of "global quick tap" (GQT), aka "require
 prior idle," for tap-hold keys. It is particularly useful for home row mods to
-avoid accidental mod triggers in fast typing.
+avoid accidental mod triggers in fast typing. Tap Flow is the predecessor of QMK
+core feature [Flow Tap](https://docs.qmk.fm/tap_hold#flow-tap).
 
 To use this module, add the following to your `keymap.json`:
 

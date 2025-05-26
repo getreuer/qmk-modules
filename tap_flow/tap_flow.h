@@ -16,6 +16,9 @@
  * @file tap_flow.h
  * @brief Tap Flow module: disable HRMs during fast typing
  *
+ * @note Tap Flow is now a core QMK feature! See
+ * <https://docs.qmk.fm/tap_hold#flow-tap>
+ *
  * This module is an implementation of "global quick tap" (GQT), aka "require
  * prior idle," for tap-hold keys. It is particularly useful for home row mods
  * to avoid accidental mod triggers in fast typing.

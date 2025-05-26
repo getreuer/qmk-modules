@@ -22,6 +22,9 @@
 
 #include "tap_flow.h"
 
+#pragma message \
+    "Tap Flow has evolved into core QMK feature Flow Tap! To use it, update your QMK set up and see https://docs.qmk.fm/tap_hold#flow-tap"
+
 ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 
 // Either the Combos feature or Repeat Key (or both) need to be enabled. Either
