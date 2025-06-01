@@ -138,8 +138,25 @@ void housekeeping_task_sentence_case(void) {
 #endif  // SENTENCE_CASE_TIMEOUT > 0
 
 bool process_record_sentence_case(uint16_t keycode, keyrecord_t* record) {
-  // Only process while enabled, and only process press events.
-  if (sentence_state == STATE_DISABLED || !record->event.pressed) {
+  // Only process press events.
+  if (!record->event.pressed) {
+    return true;
+  }
+
+  switch (keycode) {
+    case SENTENCE_CASE_ON:
+      sentence_case_on();
+      break;
+    case SENTENCE_CASE_OFF:
+      sentence_case_off();
+      break;
+    case SENTENCE_CASE_TOGGLE:
+      sentence_case_toggle();
+      break;
+  }
+
+  // Only process while enabled.
+  if (sentence_state == STATE_DISABLED) {
     return true;
   }
 
@@ -148,16 +165,6 @@ bool process_record_sentence_case(uint16_t keycode, keyrecord_t* record) {
 #endif  // SENTENCE_CASE_TIMEOUT > 0
 
   switch (keycode) {
-    case SENTENCE_CASE_ON:
-      sentence_case_on();
-      return false;
-    case SENTENCE_CASE_OFF:
-      sentence_case_off();
-      return false;
-    case SENTENCE_CASE_TOGGLE:
-      sentence_case_toggle();
-      return false;
-
     case KC_LCTL ... KC_RGUI:  // Ignore mod keys.
     case QK_ONE_SHOT_MOD ... QK_ONE_SHOT_MOD_MAX:  // Ignore one-shot mod.
     // Ignore MO, TO, TG, TT, OSL, TL layer switch keys.
