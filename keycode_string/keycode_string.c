@@ -30,6 +30,9 @@
 
 #include "quantum.h"
 
+#pragma message \
+    "Keycode String is now a core QMK feature! To use it, update your QMK set up and see https://docs.qmk.fm/unit_testing#keycode-string"
+
 ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 
 typedef int_fast8_t index_t;

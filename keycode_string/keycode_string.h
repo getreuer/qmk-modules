@@ -16,6 +16,9 @@
  * @file keycode_string.h
  * @brief Keycode String community model: format keycodes as readable strings.
  *
+ * @note Keycode String is now a core QMK feature! See
+ * <https://docs.qmk.fm/unit_testing#keycode-string>
+ *
  * Example use: Output the keycode and other event information to debug logging.
  * This supposes the Console is enabled (see https://docs.qmk.fm/faq_debug).
  *

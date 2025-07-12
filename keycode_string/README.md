@@ -12,8 +12,11 @@
 
 This is a community module adaptation of [Keycode
 String](https://getreuer.info/posts/keyboards/keycode-string), a utility to
-convert QMK keycodes to human-readable strings. It's much nicer to read names
-like "`LT(2,KC_D)`" than numerical codes like "`0x4207`."
+convert QMK keycodes to human-readable strings. Keycode String is now a [QMK
+core feature](https://docs.qmk.fm/unit_testing#keycode-string).
+
+It's much nicer to read names like "`LT(2,KC_D)`" than numerical codes like
+"`0x4207`."
 
 Add the following to your `keymap.json`:
 
