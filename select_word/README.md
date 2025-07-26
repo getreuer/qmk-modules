@@ -46,18 +46,18 @@ hotkeys:
 
 * To hardcode to Mac hotkeys, define in your `config.h` file:
 
-  ~~~{.c}
+  ```c
   #define SELECT_WORD_OS_MAC
-  ~~~
+  ```
 
 * If [OS Detection](https://docs.qmk.fm/features/os_detection) is enabled,
   Select Word uses it determine which kind of hotkeys to send. 
 
 * For direct control, define in `config.h`:
 
-  ~~~{.c}
+  ```c
   #define SELECT_WORD_OS_DYNAMIC
-  ~~~
+  ```
 
   Then in `keymap.c`, define the callback `select_word_host_is_mac()`. Return
   true for Mac hotkeys, false for Windows/Linux.
