@@ -37,7 +37,7 @@ Shift mod. Define the `get_speculative_hold()` callback to customize this.
 To enable Speculative Hold for some mod-tap keys and not others, define the
 callback like this, in your `keymap.c`:
 
-~~~{.cc}
+```cc
 bool get_speculative_hold(uint16_t keycode, keyrecord_t* record) {
   switch (keycode) {  // Enable speculative holding for these keys.
     case LCTL_T(KC_ESC):
@@ -47,7 +47,7 @@ bool get_speculative_hold(uint16_t keycode, keyrecord_t* record) {
   }
   return false;  // Disable otherwise.
 }
-~~~
+```
 
 A potential problem with speculatively-held mods is the ["flashing modifiers"
 problem](https://docs.qmk.fm/features/key_overrides#neutralize-flashing-modifiers)
@@ -56,13 +56,13 @@ To solve this, define `DUMMY_MOD_NEUTRALIZER_KEYCODE` in your `config.h` as a
 keycode to which no keyboard shortcuts are bound and define `MODS_TO_NEUTRALIZE`
 to specify which mods require intervention. Example:
 
-~~~{.c}
+```cc
 // Must be a basic, unmodified, HID keycode.
 #define DUMMY_MOD_NEUTRALIZER_KEYCODE KC_RIGHT_CTRL
 
 // Neutralize left alt and left GUI (Default value)
 #define MODS_TO_NEUTRALIZE { MOD_BIT(KC_LEFT_ALT), MOD_BIT(KC_LEFT_GUI) }
-~~~
+```
 
 For full documentation, see
 <https://getreuer.info/posts/keyboards/speculative-hold>
