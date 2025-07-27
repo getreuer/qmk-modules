@@ -68,15 +68,19 @@ static void held_keys_del_index(int8_t i) {
   }
 }
 
-#ifdef SPECULATIVE_HOLD_DEBUG
+#if defined(SPECULATIVE_HOLD_DEBUG) && !defined(NO_DEBUG)
 static void held_keys_debug(void) {
-  dprintf("speculative_hold: held_keys = { ");
-  for (int8_t i = 0; i < num_held_keys; ++i) {
-    const keypos_t key = held_keys[i].key;
-    dprintf("%02x%02x%c ", key.row, key.col, held_keys[i].mods ? ' ' : '*');
+  if (debug_enable) {
+    xprintf("speculative_hold: held_keys = { ");
+    for (int8_t i = 0; i < num_held_keys; ++i) {
+      const keypos_t key = held_keys[i].key;
+      xprintf("%02x%02x%c ", key.row, key.col, held_keys[i].mods ? ' ' : '*');
+    }
+    xprintf("}\n");
   }
-  dprintf("}\n");
 }
+#else
+#define held_keys_debug()
 #endif
 
 #ifdef COMBO_ENABLE
