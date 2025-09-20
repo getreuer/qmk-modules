@@ -32,6 +32,10 @@ Then use the "`OM_*`" Orbital Mouse keycodes in your layout.
 | `OM_D`      | `MS_DOWN`   | Move backward.                                 |
 | `OM_L`      | `MS_LEFT`   | Steer left (counter-clockwise).                |
 | `OM_R`      | `MS_RGHT`   | Steer right (clockwise).                       |
+| `OM_CS_U`   |             | Snap orb to steering to staight up.      |
+| `OM_CS_L`   |             | Snap orb to steering to staight left.      |
+| `OM_CS_D`   |             | Snap orb to steering to staight down.      |
+| `OM_CS_R`   |             | Snap orb to steering to staight right.      |
 | `OM_BTN`*n* | `MS_BTN`*n* | Press mouse button *n*, for *n* = 1, ..., 8.   |
 | `OM_W_U`    | `MS_WHLU`   | Mouse wheel up.                                |
 | `OM_W_D`    | `MS_WHLD`   | Mouse wheel down.                              |
