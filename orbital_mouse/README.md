@@ -38,6 +38,7 @@ Then use the "`OM_*`" Orbital Mouse keycodes in your layout.
 | `OM_W_L`    | `MS_WHLL`   | Mouse wheel left.                              |
 | `OM_W_R`    | `MS_WHLR`   | Mouse wheel right.                             |
 | `OM_SLOW`   |             | Slow mode. Movement is slower while held.      |
+| `OM_FAST`   |             | Fast mode. Movement is faster while held.      |
 | `OM_SEL`*n* |             | Select mouse button *n*, for *n* = 1, ..., 8.  |
 | `OM_BTNS`   |             | Press the selected mouse button.               |
 | `OM_DBLS`   |             | Double click the selected mouse button.        |
@@ -46,7 +47,7 @@ Then use the "`OM_*`" Orbital Mouse keycodes in your layout.
 
 A suggested right-handed layout for Orbital Mouse control is
 
-    OM_W_U , OM_BTNS, OM_U   , OM_DBLS, _______,
+    OM_W_U , OM_BTNS, OM_U   , OM_DBLS, OM_FAST,
     OM_W_D , OM_L   , OM_D   , OM_R   , OM_SLOW,
     OM_RELS, OM_HLDS, OM_SEL1, OM_SEL2, OM_SEL3,
 

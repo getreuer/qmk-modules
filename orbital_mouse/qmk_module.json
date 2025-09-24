@@ -6,6 +6,7 @@
         "mouse": true
     },
     "keycodes": [
+        {"key": "OM_FAST"},
         {"key": "OM_SLOW"},
         {"key": "OM_BTNS"},
         {"key": "OM_DBLS"},

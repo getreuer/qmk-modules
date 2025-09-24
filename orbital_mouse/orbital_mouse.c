@@ -34,6 +34,12 @@
 #ifndef ORBITAL_MOUSE_WHEEL_SPEED
 #define ORBITAL_MOUSE_WHEEL_SPEED 0.2
 #endif  // ORBITAL_MOUSE_WHEEL_SPEED
+#ifndef ORBITAL_MOUSE_FAST_MOVE_FACTOR
+#define ORBITAL_MOUSE_FAST_MOVE_FACTOR 3.0
+#endif  // ORBITAL_MOUSE_SLOW_MOVE_FACTOR
+#ifndef ORBITAL_MOUSE_FAST_TURN_FACTOR
+#define ORBITAL_MOUSE_FAST_TURN_FACTOR 2.0
+#endif  // ORBITAL_MOUSE_SLOW_TURN_FACTOR
 #ifndef ORBITAL_MOUSE_DBL_DELAY_MS
 #define ORBITAL_MOUSE_DBL_DELAY_MS 50
 #endif  // ORBITAL_MOUSE_DBL_DELAY_MS
@@ -64,12 +70,20 @@ enum {
   /** Slow mode turn speed factor as a Q.8 value. */
   SLOW_TURN_FACTOR_Q_8 = (ORBITAL_MOUSE_SLOW_TURN_FACTOR) < 0.99
       ? ((uint8_t)((ORBITAL_MOUSE_SLOW_TURN_FACTOR) * 256 + 0.5)) : 255,
+  /** Fast mode movement speed factor as a Q4.4 value. */
+  FAST_MOVE_FACTOR_Q4_4 = (ORBITAL_MOUSE_FAST_MOVE_FACTOR) < 15.999
+      ? ((uint8_t)((ORBITAL_MOUSE_FAST_MOVE_FACTOR) * 16 + 0.5)) : 255,
+  /** Fast mode turn speed factor as a Q4.4 value. */
+  FAST_TURN_FACTOR_Q4_4 = (ORBITAL_MOUSE_FAST_TURN_FACTOR) < 15.99
+      ? ((uint8_t)((ORBITAL_MOUSE_FAST_TURN_FACTOR) * 16 + 0.5)) : 255,
   /** Wheel speed in steps/frame as a Q2.6 value. */
   WHEEL_SPEED_Q2_6 = (ORBITAL_MOUSE_WHEEL_SPEED) < 3.99
       ? ((uint8_t)((ORBITAL_MOUSE_WHEEL_SPEED) * 64 + 0.5)) : 255,
   /** Double click delay in units of intervals. */
   DOUBLE_CLICK_DELAY_INTERVALS =
       (ORBITAL_MOUSE_DBL_DELAY_MS) / (ORBITAL_MOUSE_INTERVAL_MS),
+
+      
 };
 
 // Masks for the `held_keys` bitfield.
@@ -119,6 +133,9 @@ static struct {
   uint8_t double_click_frame;
   // When true, movement and turning are slower.
   bool slow;
+  // When true, movement and turning are faster.
+  bool fast;
+  // if slow and fast are both true then fast is ignored.
 } state = {.speed_curve = init_speed_curve};
 
 /**
@@ -217,8 +234,8 @@ void set_orbital_mouse_angle(uint8_t angle) {
 }
 
 bool process_record_orbital_mouse(uint16_t keycode, keyrecord_t* record) {
-  if (!(IS_MOUSE_KEYCODE(keycode) ||
-        (OM_SLOW <= keycode && keycode <= OM_SEL8))) {
+  if (!(IS_MOUSE_KEYCODE(keycode)  ||
+        (OM_FAST <= keycode && keycode <= OM_SEL8))) {
     return true;
   }
 
@@ -255,6 +272,9 @@ bool process_record_orbital_mouse(uint16_t keycode, keyrecord_t* record) {
         break;
       case OM_SLOW:
         state.slow = record->event.pressed;
+        return false;
+      case OM_FAST:
+       state.fast = record->event.pressed;
         return false;
       case OM_SEL1 ... OM_SEL8:
         if (record->event.pressed) {
@@ -307,6 +327,9 @@ void housekeeping_task_orbital_mouse(void) {
     if (state.slow) {
       speed = ((uint16_t)speed) * (1 + (uint16_t)SLOW_MOVE_FACTOR_Q_8) >> 8;
     }
+    else if (state.fast) {
+      speed = ((uint16_t)speed) * (1 + (uint16_t)FAST_MOVE_FACTOR_Q4_4) >> 4;
+    }
 
     state.x -= state.move_dir * scaled_sin(speed, state.angle >> 8);
     state.y -= state.move_dir * scaled_cos(speed, state.angle >> 8);
@@ -315,7 +338,7 @@ void housekeeping_task_orbital_mouse(void) {
 
   // Update heading angle if steering.
   if (state.steer_dir) {
-    int16_t angle_step = state.slow ? SLOW_TURN_FACTOR_Q_8 : 256;
+    int16_t angle_step = state.slow ? SLOW_TURN_FACTOR_Q_8 : (state.fast ? FAST_TURN_FACTOR_Q4_4 << 4: 256);
     if (state.steer_dir == -1) {
       angle_step = -angle_step;
     }
