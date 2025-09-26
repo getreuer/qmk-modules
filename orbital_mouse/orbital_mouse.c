@@ -265,21 +265,29 @@ bool process_record_orbital_mouse(uint16_t keycode, keyrecord_t* record) {
         return false;
       // Check if cardinal snapping is desired
       case OM_CS_U:
-        state.angle = 0 << 8; //16*0
-        state.override_angle = true;
-        return true;
+        if (record->event.pressed) {
+          state.angle = 0 << 8; //16*0
+          state.override_angle = true;
+          return true;
+        }
       case OM_CS_L:
-        state.angle = 16 << 8; //16*1
-        state.override_angle = true;
-        return true;
+        if (record->event.pressed) {
+          state.angle = 16 << 8; //16*1
+          state.override_angle = true;
+          return true;
+        }
       case OM_CS_D:
-        state.angle = 32 << 8; //16*2
-        state.override_angle = true;
-        return true;
+        if (record->event.pressed) {
+          state.angle = 32 << 8; //16*2
+          state.override_angle = true;
+          return true;
+        }
       case OM_CS_R:
-        state.angle = 48 << 8; //16*3
-        state.override_angle = true;
-        return true;
+        if (record->event.pressed) {
+          state.angle = 48 << 8; //16*3
+          state.override_angle = true;
+          return true;
+        }
     }
   }
 
