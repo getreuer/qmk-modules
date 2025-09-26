@@ -149,6 +149,8 @@ static struct {
   // When true, movement and turning are faster.
   bool fast;
   // if slow and fast are both true then fast is ignored.
+  // When true, ignore steering and apply state.angle directly.
+  bool override_angle;
 } state = {.speed_curve = init_speed_curve};
 
 /**
@@ -247,8 +249,8 @@ void set_orbital_mouse_angle(uint8_t angle) {
 }
 
 bool process_record_orbital_mouse(uint16_t keycode, keyrecord_t* record) {
-  if (!(IS_MOUSE_KEYCODE(keycode)  ||
-        (OM_FAST <= keycode && keycode <= OM_SEL8))) {
+  if (!(IS_MOUSE_KEYCODE(keycode) ||
+        (OM_CS_U <= keycode && keycode <= OM_SEL8))) {
     return true;
   }
 
@@ -294,6 +296,31 @@ bool process_record_orbital_mouse(uint16_t keycode, keyrecord_t* record) {
           select_mouse_button(keycode - OM_SEL1);
         }
         return false;
+      // Check if cardinal snapping is desired
+      case OM_CS_U:
+        if (record->event.pressed) {
+          state.angle = 0 << 8; //16*0
+          state.override_angle = true;
+          return true;
+        }
+      case OM_CS_L:
+        if (record->event.pressed) {
+          state.angle = 16 << 8; //16*1
+          state.override_angle = true;
+          return true;
+        }
+      case OM_CS_D:
+        if (record->event.pressed) {
+          state.angle = 32 << 8; //16*2
+          state.override_angle = true;
+          return true;
+        }
+      case OM_CS_R:
+        if (record->event.pressed) {
+          state.angle = 48 << 8; //16*3
+          state.override_angle = true;
+          return true;
+        }
     }
   }
 
@@ -348,10 +375,14 @@ void housekeeping_task_orbital_mouse(void) {
     state.y -= state.move_dir * scaled_cos(speed, state.angle >> 8);
     active = true;
   }
-
-  // Update heading angle if steering.
-  if (state.steer_dir) {
-    int16_t angle_step = state.slow ? SLOW_TURN_FACTOR_Q_8 : (state.fast ? FAST_TURN_FACTOR_Q4_4 << 4: 256);
+  // Force the angle if angle is overridden
+  if (state.override_angle) {
+    set_orbital_mouse_angle_fractional(state.angle);
+    state.override_angle = false;
+  }
+  // Otherwise update heading angle if steering.
+  else if (state.steer_dir) {
+    int16_t angle_step = state.slow ? SLOW_TURN_FACTOR_Q_8 : 256;
     if (state.steer_dir == -1) {
       angle_step = -angle_step;
     }
@@ -397,4 +428,3 @@ void housekeeping_task_orbital_mouse(void) {
   state.wheel_y -= (int16_t)state.report.v * 64;
   host_mouse_send(&state.report);
 }
-
