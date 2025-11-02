@@ -129,6 +129,8 @@ static struct {
   int16_t speed;
   // Bitfield tracking which movement keys are currently held.
   uint8_t held_keys;
+  // Bitfield tracking which cardinal movement keys are held.
+  uint8_t held_card_keys;
   // Cursor movement time, counted in number of intervals.
   uint8_t move_t;
   // Cursor movement direction, 1 => forward, -1 => backward.
@@ -225,6 +227,21 @@ static int8_t get_dir_from_held_keys(uint8_t bit_shift) {
   return dir[(state.held_keys >> bit_shift) & 3];
 }
 
+static uint8_t get_card_angle_from_held_keys(void) {
+  static const uint8_t card_angles[16] PROGMEM = {
+    // Zero values in this array represent "no movement."
+    [HELD_U]          = 0x80, // Up. Set high bit to distinguish from zero.
+    [HELD_U | HELD_L] = 1 * (NUM_ANGLES / 8), // Up+Left.
+    [HELD_L]          = 2 * (NUM_ANGLES / 8), // Left.
+    [HELD_D | HELD_L] = 3 * (NUM_ANGLES / 8), // Down+Left.
+    [HELD_D]          = 4 * (NUM_ANGLES / 8), // Down.
+    [HELD_D | HELD_R] = 5 * (NUM_ANGLES / 8), // Down+Right.
+    [HELD_R]          = 6 * (NUM_ANGLES / 8), // Right.
+    [HELD_U | HELD_R] = 7 * (NUM_ANGLES / 8), // Up+Right.
+  };
+  return pgm_read_byte(card_angles + state.held_card_keys);
+}
+
 void set_orbital_mouse_speed_curve(const uint8_t* speed_curve) {
   state.speed_curve = (speed_curve != NULL) ? speed_curve : init_speed_curve;
 }
@@ -259,6 +276,13 @@ bool process_record_orbital_mouse(uint16_t keycode, keyrecord_t* record) {
       state.held_keys |= held_mask;
     } else {
       state.held_keys &= ~held_mask;
+    }
+  } else if (OM_CS_U <= keycode && keycode <= OM_CS_R) {
+    const uint8_t card_mask = 1 << (keycode - OM_CS_U);
+    if (record->event.pressed) {
+      state.held_card_keys |= card_mask;
+    } else {
+      state.held_card_keys &= ~card_mask;
     }
   } else {
     switch (keycode) {
@@ -322,14 +346,27 @@ bool process_record_orbital_mouse(uint16_t keycode, keyrecord_t* record) {
     }
   }
 
+  int8_t move_dir = 0;
+
   // Update cursor movement direction.
-  const int8_t dir = get_dir_from_held_keys(0);
-  if (state.move_dir != dir) {
-    state.move_dir = dir;
+  if (state.held_card_keys) {  // If any cardinal key is held.
+    const uint8_t angle = get_card_angle_from_held_keys();  // Map to angle.
+    if (angle) {  // If the held keys combination is valid.
+      state.angle = (uint16_t)angle << 8;
+      move_dir = 1;
+    }
+    state.steer_dir = 0;  // Freeze steering.
+  } else {  // Otherwise, the default polar controls apply.
+    move_dir = get_dir_from_held_keys(0);
+    // Update steering direction.
+    state.steer_dir = get_dir_from_held_keys(2);
+  }
+
+  if (state.move_dir != move_dir) {
+    state.move_dir = move_dir;
     state.move_t = 0;
   }
-  // Update steering direction.
-  state.steer_dir = get_dir_from_held_keys(2);
+
   // Update wheel movement.
   state.wheel_y_dir = get_dir_from_held_keys(4);
   state.wheel_x_dir = get_dir_from_held_keys(6);
@@ -375,7 +412,9 @@ void housekeeping_task_orbital_mouse(void) {
   }
   // Update heading angle if steering.
   if (state.steer_dir) {
-    int16_t angle_step = state.slow ? SLOW_TURN_FACTOR_Q_8 : 256;
+    int16_t angle_step = state.slow
+      ? SLOW_TURN_FACTOR_Q_8
+      : (state.fast ? FAST_TURN_FACTOR_Q4_4 << 4: 256);
     if (state.steer_dir == -1) {
       angle_step = -angle_step;
     }

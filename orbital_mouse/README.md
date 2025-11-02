@@ -2,7 +2,7 @@
 
 <table>
 <tr><td><b>Module</b></td><td><tt>getreuer/orbital_mouse</tt></td></tr>
-<tr><td><b>Version</b></td><td>2025-03-07</td></tr>
+<tr><td><b>Version</b></td><td>2025-11-01</td></tr>
 <tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
 <tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
 <tr><td><b>Documentation</b></td><td>
@@ -32,10 +32,10 @@ Then use the "`OM_*`" Orbital Mouse keycodes in your layout.
 | `OM_D`      | `MS_DOWN`   | Move backward.                                 |
 | `OM_L`      | `MS_LEFT`   | Steer left (counter-clockwise).                |
 | `OM_R`      | `MS_RGHT`   | Steer right (clockwise).                       |
-| `OM_CS_U`   |             | Snap orb to steering to staight up.            |
-| `OM_CS_L`   |             | Snap orb to steering to staight left.          |
-| `OM_CS_D`   |             | Snap orb to steering to staight down.          |
-| `OM_CS_R`   |             | Snap orb to steering to staight right.         |
+| `OM_CS_U`   |             | Move up.                                       |
+| `OM_CS_D`   |             | Move down.                                     |
+| `OM_CS_L`   |             | Move left.                                     |
+| `OM_CS_R`   |             | Move right.                                    |
 | `OM_BTN`*n* | `MS_BTN`*n* | Press mouse button *n*, for *n* = 1, ..., 8.   |
 | `OM_W_U`    | `MS_WHLU`   | Mouse wheel up.                                |
 | `OM_W_D`    | `MS_WHLD`   | Mouse wheel down.                              |

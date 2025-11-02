@@ -7,9 +7,9 @@
     },
     "keycodes": [
         {"key": "OM_CS_U"},
-        {"key": "OM_CS_R"},
-        {"key": "OM_CS_L"},
         {"key": "OM_CS_D"},
+        {"key": "OM_CS_L"},
+        {"key": "OM_CS_R"},
         {"key": "OM_FAST"},
         {"key": "OM_SLOW"},
         {"key": "OM_BTNS"},
