@@ -372,7 +372,7 @@ bool process_record_orbital_mouse(uint16_t keycode, keyrecord_t* record) {
   state.wheel_x_dir = get_dir_from_held_keys(6);
   wake_orbital_mouse_task();
 
-  return false;
+  return true;
 }
 
 void housekeeping_task_orbital_mouse(void) {
