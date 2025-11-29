@@ -2,7 +2,7 @@
 
 <table>
 <tr><td><b>Module</b></td><td><tt>getreuer/lumino</tt></td></tr>
-<tr><td><b>Version</b></td><td>2025-04-17</td></tr>
+<tr><td><b>Version</b></td><td>2025-11-28</td></tr>
 <tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
 <tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
 <tr><td><b>Documentation</b></td><td>
