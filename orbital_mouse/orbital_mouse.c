@@ -288,20 +288,20 @@ bool process_record_orbital_mouse(uint16_t keycode, keyrecord_t* record) {
     switch (keycode) {
       case OM_BTN1 ... OM_BTN8:
         press_mouse_button(keycode - OM_BTN1, record->event.pressed);
-        return false;
+        return true;
       case OM_BTNS:
         press_mouse_button(255, record->event.pressed);
-        return false;
+        return true;
       case OM_HLDS:
         if (record->event.pressed) {
           press_mouse_button(255, true);
         }
-        return false;
+        return true;
       case OM_RELS:
         if (record->event.pressed) {
           press_mouse_button(255, false);
         }
-        return false;
+        return true;
       case OM_DBLS:
         if (record->event.pressed) {
           state.double_click_frame = 1;
@@ -309,15 +309,15 @@ bool process_record_orbital_mouse(uint16_t keycode, keyrecord_t* record) {
         break;
       case OM_SLOW:
         state.slow = record->event.pressed;
-        return false;
+        return true;
       case OM_FAST:
        state.fast = record->event.pressed;
-        return false;
+        return true;
       case OM_SEL1 ... OM_SEL8:
         if (record->event.pressed) {
           select_mouse_button(keycode - OM_SEL1);
         }
-        return false;
+        return true;
       // Check if cardinal snapping is desired
       case OM_CS_U:
         if (record->event.pressed) {
