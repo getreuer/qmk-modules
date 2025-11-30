@@ -179,9 +179,9 @@ void lumino_sleep_soon(void) {
   update_sleep_timer();
 }
 
-void lumino_wake(uint8_t event_count) {
+void lumino_wake(uint8_t step) {
 #ifdef USE_SLEEP_TIMER
-  event_count = qadd8(event_count, 1);
+  event_count = qadd8(event_count, step);
 #endif  // USE_SLEEP_TIMER
 
   if (awake_value > 0) {

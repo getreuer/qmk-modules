@@ -75,11 +75,11 @@ void lumino_sleep_soon(void);
  * Tells lighting to wake up.
  *
  * This function is used to indicate or simulate user activity. It tells the
- * lighting to wake up (if sleeping) and adds `event_count` to the activity
- * counter. The argument is typically `event_count = 1` to consider the call
- * as representing one key event's worth of activity.
+ * lighting to wake up (if sleeping) and adds `step` to the activity counter.
+ * The argument is typically `step = 1` to consider the call as representing one
+ * key event's worth of activity.
  */
-void lumino_wake(uint8_t event_count);
+void lumino_wake(uint8_t step);
 
 #ifdef __cplusplus
 }
