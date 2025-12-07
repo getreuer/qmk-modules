@@ -10,11 +10,12 @@
 </td></tr>
 </table>
 
+Achordion is the predecessor of QMK core feature [Chordal
+Hold](https://docs.qmk.fm/tap_hold#chordal-hold).
+
 This is a community module adaptation of
 [Achordion](https://getreuer.info/posts/keyboards/achordion), a customizable
-"opposite hands" rule implementation for tap-hold keys. Achordion is the
-predecessor of QMK core feature [Chordal
-Hold](https://docs.qmk.fm/tap_hold#chordal-hold).
+"opposite hands" rule implementation for tap-hold keys.
 
 Add the following to your `keymap.json` to use Achordion:
 
