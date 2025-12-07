@@ -22,6 +22,9 @@
 
 #include "speculative_hold.h"
 
+#pragma message \
+    "Speculative Hold is now a core QMK feature! To use it, update your QMK set up and see https://docs.qmk.fm/tap_hold#speculative-hold"
+
 ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 
 // Events bypass Speculative Hold when there are unsettled LT keys in

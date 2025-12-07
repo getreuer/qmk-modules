@@ -16,6 +16,9 @@
  * @file speculative_hold.h
  * @brief Speculative Hold module
  *
+ * @note Speculative Hold is now a core QMK feature! See
+ * <https://docs.qmk.fm/tap_hold#speculative-hold>
+ *
  * With Speculative Hold, the hold function on mod-tap keys is activate
  * immediately on key down. Then depending on how the mod-tap key is settled,
  * the hold action is canceled (when the mod-tap is being tapped) or allowed to

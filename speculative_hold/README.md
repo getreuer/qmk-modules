@@ -10,6 +10,9 @@
 </td></tr>
 </table>
 
+Speculative Hold is now a [QMK
+core feature](https://docs.qmk.fm/tap_hold#speculative-hold).
+
 Speculative Hold is a QMK community module that modifies mod-tap `MT` keys. The
 mod is applied immediately on key down, eliminating delay, particularly when
 using mod-tap keys in tandem with an external mouse. Depending on how the
