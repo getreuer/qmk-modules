@@ -1,4 +1,4 @@
-// Copyright 2023-2025 Google LLC
+// Copyright 2023-2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -95,8 +95,6 @@ enum {
   /** Double click delay in units of intervals. */
   DOUBLE_CLICK_DELAY_INTERVALS =
       (ORBITAL_MOUSE_DBL_DELAY_MS) / (ORBITAL_MOUSE_INTERVAL_MS),
-
-      
 };
 
 // Masks for the `held_keys` bitfield.
