@@ -1,6 +1,7 @@
 {
     "module_name": "Sentence Case",
     "maintainer": "getreuer",
+    "license": "Apache-2.0",
     "url": "https://getreuer.info/posts/keyboards/sentence-case",
     "keycodes": [
         {"key": "SENTENCE_CASE_ON"},

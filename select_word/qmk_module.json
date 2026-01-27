@@ -1,6 +1,7 @@
 {
     "module_name": "Select Word",
     "maintainer": "getreuer",
+    "license": "Apache-2.0",
     "url": "https://getreuer.info/posts/keyboards/select-word",
     "keycodes": [
         {

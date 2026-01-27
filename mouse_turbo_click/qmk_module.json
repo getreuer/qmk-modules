@@ -1,6 +1,7 @@
 {
     "module_name": "Mouse Turbo Click",
     "maintainer": "getreuer",
+    "license": "Apache-2.0",
     "url": "https://getreuer.info/posts/keyboards/mouse-turbo-click",
     "features": {
         "deferred_exec": true,
