@@ -1,4 +1,4 @@
-// Copyright 2021-2025 Google LLC
+// Copyright 2021-2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,6 +46,7 @@ extern "C" {
  *     'W' = word selection
  *     'B' = backward word selection, left of the cursor
  *     'L' = line selection
+ *     'U' = upward line selection
  *
  * A selection is first registered with `select_word_register(action)`. This
  * should be followed by a call to `select_word_unregister()` to unregister the

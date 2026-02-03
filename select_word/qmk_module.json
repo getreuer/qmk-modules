@@ -21,6 +21,12 @@
             "aliases": [
               "SELLINE"
             ]
+        },
+        {
+            "key": "SELECT_LINE_UP",
+            "aliases": [
+              "SELLUP"
+            ]
         }
     ]
 }
