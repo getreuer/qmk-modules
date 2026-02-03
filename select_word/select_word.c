@@ -103,11 +103,11 @@ static void clear_all_mods(void) {
 
 static void select_word_in_dir(int8_t dir) {
   // With Windows and Linux (non-Mac) systems:
-  // dir < 0: Backward word selection: Ctrl+Left, Ctrl+Right, Ctrl+Shift+Left.
-  // dir > 0: Forward word selection: Ctrl+Right, Ctrl+Left, Ctrl+Shift+Right.
+  // dir < 0: Backward selection: Ctrl+Left, Ctrl+Right, Ctrl+Shift+Left.
+  // dir > 0: Forward selection: Ctrl+Right, Ctrl+Left, Ctrl+Shift+Right.
   // Or to extend an existing selection:
-  // dir < 0: Backward word selection: Ctrl+Shift+Left.
-  // dir > 0: Forward word selection: Ctrl+Shift+Right.
+  // dir < 0: Backward selection: Ctrl+Shift+Left.
+  // dir > 0: Forward selection: Ctrl+Shift+Right.
   //
   // With Mac OS, use Alt (Opt) instead of Ctrl:
   // dir < 0: Backward word selection: Alt+Left, Alt+Right, Alt+Shift+Left.
@@ -142,34 +142,60 @@ static void select_word_in_dir(int8_t dir) {
   selection_dir = dir;
 }
 
-static void select_line(void) {
+static void select_line(int8_t dir) {
   // With Windows and Linux (non-Mac) systems:
-  // Home, Shift+End.
+  // dir < 0: Backward selection: End, Shift+Home.
+  // dir > 0: Forward selection: Home, Shift+End.
   // Or to extend an existing selection:
-  // Shift+Down.
+  // dir < 0: Backward selection: Shift+Up.
+  // dir > 0: Forward selection: Shift+Down.
   //
   // With Mac OS, use GUI (Command) + arrows:
-  // GUI+Left, Shift+GUI+Right.
+  // dir < 0: Backward selection: GUI+Right, Shift+GUI+Left.
+  // dir > 0: Forward selection: GUI+Left, Shift+GUI+Right.
   // Or to extend an existing selection:
-  // Shift+Down.
+  // dir < 0: Backward selection: Shift+Up.
+  // dir > 0: Forward selection: Shift+Down.
+
   reset_before_next_event = false;
   const uint8_t saved_mods = get_mods();
   clear_all_mods();
 
-  if (selection_dir != 2) {
+  if (selection_dir && (selection_dir < 0) != (dir < 0)) {  // Reversal.
     send_keyboard_report();
     send_string_with_delay_P(
-        IS_MAC ? PSTR(SS_LGUI(SS_TAP(X_LEFT) SS_LSFT(SS_TAP(X_RGHT))))
-               : PSTR(SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_END))),
-        TAP_CODE_DELAY);
-  } else {
-    register_mods(MOD_BIT_LSHIFT);
-    registered_hotkey = KC_DOWN;
-    register_code(KC_DOWN);
+        IS_MAC
+            ? PSTR((dir < 0)
+                ? SS_LGUI(SS_TAP(X_RGHT))
+                : SS_LGUI(SS_TAP(X_LEFT)))
+            : PSTR((dir < 0)
+                ? SS_TAP(X_END)
+                : SS_TAP(X_HOME)),
+        TAP_CODE_DELAY
+    );
   }
 
+  if (selection_dir == 0) {  // Initial selection.
+    send_keyboard_report();
+    if (dir < 0) {
+      send_string_with_delay_P(
+         IS_MAC ? PSTR(SS_LGUI(SS_TAP(X_RGHT) SS_LSFT(SS_TAP(X_LEFT))))
+                : PSTR(SS_TAP(X_END) SS_LSFT(SS_TAP(X_HOME))),
+       TAP_CODE_DELAY);
+    } else {
+      send_string_with_delay_P(
+          IS_MAC ? PSTR(SS_LGUI(SS_TAP(X_LEFT) SS_LSFT(SS_TAP(X_RGHT))))
+                 : PSTR(SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_END))),
+        TAP_CODE_DELAY);
+    }
+  }
+
+  register_mods(MOD_BIT_LSHIFT);
+  registered_hotkey = (dir < 0) ? KC_UP : KC_DOWN;
+  register_code(registered_hotkey);
+
   set_mods(saved_mods);
-  selection_dir = 2;
+  selection_dir = dir;
 }
 
 void select_word_register(char action) {
@@ -181,11 +207,13 @@ void select_word_register(char action) {
     case 'W':
       select_word_in_dir(1);
       break;
-    case 'B':
+    case 'WB':
       select_word_in_dir(-1);
       break;
     case 'L':
-      select_line();
+      select_line(1);
+    case 'LB':
+      select_line(-1);
       break;
   }
 
@@ -208,6 +236,18 @@ void select_word_unregister(void) {
     send_string_with_delay_P(
         IS_MAC ? PSTR(SS_LGUI(SS_LSFT(SS_TAP(X_RGHT))))
                : PSTR(SS_LSFT(SS_TAP(X_END))),
+        TAP_CODE_DELAY);
+    set_mods(saved_mods);
+  } else if (registered_hotkey == KC_UP) {
+    // When using line selection to select multiple lines, tap Shift+Home (or on
+    // Mac, GUI+Shift+Left) on release to ensure the selection extends to the
+    // end of the current line.
+    const uint8_t saved_mods = get_mods();
+    clear_all_mods();
+    send_keyboard_report();
+    send_string_with_delay_P(
+        IS_MAC ? PSTR(SS_LGUI(SS_LSFT(SS_TAP(X_LEFT))))
+               : PSTR(SS_LSFT(SS_TAP(X_HOME))),
         TAP_CODE_DELAY);
     set_mods(saved_mods);
   }
@@ -281,7 +321,7 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t* record) {
 
     case SELECT_WORD_BACK:
       if (record->event.pressed) {
-        select_word_register('B');
+        select_word_register(shifted ? 'LB' : 'WB');
       } else {
         select_word_unregister();
       }
@@ -290,6 +330,13 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t* record) {
     case SELECT_LINE:
       if (record->event.pressed) {
         select_word_register('L');
+      } else {
+        select_word_unregister();
+      }
+      return false;
+    case SELECT_LINE_BACK:
+      if (record->event.pressed) {
+        select_word_register('LB');
       } else {
         select_word_unregister();
       }
