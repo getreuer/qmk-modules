@@ -29,6 +29,13 @@ ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 #  define SELECT_WORD_TIMEOUT  5000
 #endif  // SELECT_WORD_TIMEOUT
 
+typedef enum {
+  SELECT_WORD_FORWARD,
+  SELECT_WORD_BACKWARD,
+  SELECT_LINE_FORWARD,
+  SELECT_LINE_BACKWARD
+} select_word_action_t;
+
 static int8_t selection_dir = 0;
 static bool reset_before_next_event = false;
 static uint8_t registered_hotkey = KC_NO;
@@ -198,21 +205,22 @@ static void select_line(int8_t dir) {
   selection_dir = dir;
 }
 
-void select_word_register(char action) {
+void select_word_register(select_word_action_t action) {
   if (registered_hotkey) {
     select_word_unregister();
   }
 
   switch (action) {
-    case 'W':
+    case SELECT_WORD_FORWARD:
       select_word_in_dir(1);
       break;
-    case 'WB':
+    case SELECT_WORD_BACKWARD:
       select_word_in_dir(-1);
       break;
-    case 'L':
+    case SELECT_LINE_FORWARD:
       select_line(1);
-    case 'LB':
+      break;  // Note: you were missing this break!
+    case SELECT_LINE_BACKWARD:
       select_line(-1);
       break;
   }
@@ -313,7 +321,7 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t* record) {
   switch (keycode) {
     case SELECT_WORD:
       if (record->event.pressed) {
-        select_word_register(shifted ? 'L' : 'W');
+        select_word_register(shifted ? SELECT_LINE_FORWARD : SELECT_WORD_FORWARD);
       } else {
         select_word_unregister();
       }
@@ -321,7 +329,7 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t* record) {
 
     case SELECT_WORD_BACK:
       if (record->event.pressed) {
-        select_word_register(shifted ? 'LB' : 'WB');
+        select_word_register(shifted ? SELECT_LINE_BACKWARD : SELECT_WORD_BACKWARD);
       } else {
         select_word_unregister();
       }
@@ -329,14 +337,14 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t* record) {
 
     case SELECT_LINE:
       if (record->event.pressed) {
-        select_word_register('L');
+        select_word_register(SELECT_LINE_FORWARD);
       } else {
         select_word_unregister();
       }
       return false;
     case SELECT_LINE_BACK:
       if (record->event.pressed) {
-        select_word_register('LB');
+        select_word_register(SELECT_LINE_BACKWARD);
       } else {
         select_word_unregister();
       }
