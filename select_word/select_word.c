@@ -216,20 +216,35 @@ void select_word_unregister(void) {
   reset_before_next_event = false;
   unregister_code(registered_hotkey);
 
-  if (registered_hotkey == KC_DOWN) {
-    // When using line selection to select multiple lines, tap Shift+End (or on
-    // Mac, GUI+Shift+Right) on release to ensure the selection extends to the
-    // end of the current line.
-    const uint8_t saved_mods = get_mods();
-    clear_all_mods();
-    send_keyboard_report();
-    send_string_with_delay_P(
-        IS_MAC ? PSTR(SS_LGUI(SS_LSFT(SS_TAP(X_RGHT))))
-               : PSTR(SS_LSFT(SS_TAP(X_END))),
-        TAP_CODE_DELAY);
-    set_mods(saved_mods);
+  const uint8_t saved_mods = get_mods();
+  clear_all_mods();
+
+  switch (registered_hotkey) {
+    case KC_DOWN:
+      // When using line selection to select multiple lines, tap Shift+End (or
+      // on Mac, GUI+Shift+Right) on release to ensure the selection extends to
+      // the end of the current line.
+      send_keyboard_report();
+      send_string_with_delay_P(
+          IS_MAC ? PSTR(SS_LGUI(SS_LSFT(SS_TAP(X_RGHT))))
+                 : PSTR(SS_LSFT(SS_TAP(X_END))),
+          TAP_CODE_DELAY);
+      break;
+
+    case KC_UP:
+      // When using upward line selection to select multiple lines, tap
+      // Shift+Home (or on Mac, GUI+Shift+Left) on release to ensure the
+      // selection extends to the beginning of the current line.
+      send_keyboard_report();
+      send_string_with_delay_P(
+          IS_MAC ? PSTR(SS_LGUI(SS_LSFT(SS_TAP(X_LEFT))))
+                 : PSTR(SS_LSFT(SS_TAP(X_HOME))),
+          TAP_CODE_DELAY);
+      set_mods(saved_mods);
+      break;
   }
 
+  set_mods(saved_mods);
   registered_hotkey = KC_NO;
 #if SELECT_WORD_TIMEOUT > 0
   restart_idle_timer();
@@ -295,7 +310,7 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t* record) {
       } else {
         select_word_unregister();
       }
-      return false;
+      break;
 
     case SELECT_WORD_BACK:
       if (record->event.pressed) {
@@ -303,7 +318,7 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t* record) {
       } else {
         select_word_unregister();
       }
-      return false;
+      break;
 
     case SELECT_LINE:
       if (record->event.pressed) {
@@ -311,7 +326,7 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t* record) {
       } else {
         select_word_unregister();
       }
-      return false;
+      break;
 
     case SELECT_LINE_UP:
       if (record->event.pressed) {
@@ -319,7 +334,7 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t* record) {
       } else {
         select_word_unregister();
       }
-      return false;
+      break;
   }
 
   return true;
