@@ -8,6 +8,7 @@
 |-------------------------------------------|-------------------------------------------------------|
 | [Achordion](./achordion/)                 | Customize the tap-hold decision.                      |
 | [Custom Shift Keys](./custom_shift_keys/) | Customize what keycode is produced when shifted.      |
+| [Cyclotab](./cyclotab/)                   | A swapper implementation for easier Alt+Tabbing.      |
 | [Keycode String](./keycode_string/)       | Format QMK keycodes as human-readable strings.        |
 | [Lumino](./lumino/)                       | An opinionated RGB matrix lighting control scheme.    |
 | [Mouse Turbo Click](./mouse_turbo_click/) | Click the mouse rapidly.                              |
