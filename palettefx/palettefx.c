@@ -1,4 +1,4 @@
-// Copyright 2024-2025 Google LLC
+// Copyright 2024-2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
 
 #include <lib/lib8tion/lib8tion.h>
 
-ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
+ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 1, 0);
 
 /**
  * @brief 16-bit HSV color.

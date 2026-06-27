@@ -2,7 +2,7 @@
 
 <table>
 <tr><td><b>Module</b></td><td><tt>getreuer/palettefx</tt></td></tr>
-<tr><td><b>Version</b></td><td>2025-03-07</td></tr>
+<tr><td><b>Version</b></td><td>2026-06-26</td></tr>
 <tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
 <tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
 <tr><td><b>Documentation</b></td><td>
@@ -27,13 +27,6 @@ Add the following to your `keymap.json`:
 {
     "modules": ["getreuer/palettefx"]
 }
-```
-
-Then in your keymap folder, create a file `rgb_matrix_user.inc` with the
-following content, or if it already exists, add this as the first line:
-
-```c
-#include "palettefx.inc"
 ```
 
 ## Using PaletteFx

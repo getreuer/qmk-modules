@@ -1,4 +1,4 @@
-// Copyright 2024-2025 Google LLC
+// Copyright 2024-2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@
  * For full documentation, see
  * <https://getreuer.info/posts/keyboards/palettefx>
  */
-
-#ifdef COMMUNITY_MODULE_PALETTEFX_ENABLE
 
 #include "palettefx_default_config.h"
 
@@ -341,5 +339,4 @@ static bool PALETTEFX_REACTIVE(effect_params_t* params) {
 #endif
 
 #endif  // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-#endif  // COMMUNITY_MODULE_PALETTEFX_ENABLE
 
