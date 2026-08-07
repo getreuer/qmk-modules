@@ -69,7 +69,7 @@ leader key itself (configurable with `SUPER_LEADER_MAX_LENGTH`).
 
 When evaluating the sequence, tap-hold keys are reduced to their tapping
 keycode. E.g. the sequence definition `SUPER_LEADER((KC_D, KC_F, KC_U),
-QK_BOOT)` matches even when the <kbd>F</kdb> key is actually a mod-tap like
+QK_BOOT)` matches even when the <kbd>F</kbd> key is actually a mod-tap like
 `LSFT_T(KC_F)`.
 
 ## Customization
