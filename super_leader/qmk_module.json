@@ -1,0 +1,14 @@
+{
+    "module_name": "Super Leader",
+    "maintainer": "getreuer",
+    "license": "Apache-2.0",
+    "url": "https://getreuer.info/posts/keyboards/super-leader",
+    "keycodes": [
+        {
+            "key": "KC_SUPER_LEADER",
+            "aliases": [
+              "LEADER"
+            ]
+        }
+    ]
+}

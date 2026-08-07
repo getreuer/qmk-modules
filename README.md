@@ -17,6 +17,7 @@
 | [Select Word](./select_word/)             | Convenient word and line selection.                   |
 | [Sentence Case](./sentence_case/)         | Automatically capitalize sentences.                   |
 | [SOCD Cleaner](./socd_cleaner/)           | SOCD filtering for fast gaming inputs.                |
+| [Super Leader](./super_leader/)           | A snappy leader key with concise definitions.         |
 | [Speculative Hold](./speculative_hold/)   | Apply mod-tap mods immediately on key down.           |
 | [Tap Flow](./tap_flow/)                   | Disable HRMs during fast typing (Global Quick Tap).   |
 
