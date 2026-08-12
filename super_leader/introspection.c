@@ -12,19 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#define SEQ_KEY(name_, keys_, kc_)                   \
-  static const uint16_t PROGMEM sl_seq_##name_[] = { \
-      SUPER_LEADER_UNPAREN_(keys_), SUPER_LEADER_END};
-#define SEQ_STR(name_, keys_, str_)                    \
-  static const uint16_t PROGMEM sl_seq_##name_[] = {   \
-      SUPER_LEADER_UNPAREN_(keys_), SUPER_LEADER_END}; \
+#define SEQ_KEY(name_, keys_, kc_) \
+  static const uint16_t PROGMEM sl_seq_##name_[] = SUPER_LEADER_ARRAY_(keys_);
+#define SEQ_STR(name_, keys_, str_)                                            \
+  static const uint16_t PROGMEM sl_seq_##name_[] = SUPER_LEADER_ARRAY_(keys_); \
   static const char PROGMEM sl_data_##name_[] = (str_);
-#define SEQ_UNI(name_, keys_, str_)                  \
-  static const uint16_t PROGMEM sl_seq_##name_[] = { \
-      SUPER_LEADER_UNPAREN_(keys_), SUPER_LEADER_END};
-#define SEQ_FUN(name_, keys_, ...)                   \
-  static const uint16_t PROGMEM sl_seq_##name_[] = { \
-      SUPER_LEADER_UNPAREN_(keys_), SUPER_LEADER_END};
+#define SEQ_UNI(name_, keys_, str_) \
+  static const uint16_t PROGMEM sl_seq_##name_[] = SUPER_LEADER_ARRAY_(keys_);
+#define SEQ_FUN(name_, keys_, ...) \
+  static const uint16_t PROGMEM sl_seq_##name_[] = SUPER_LEADER_ARRAY_(keys_);
 #include "super_leader.def"
 #undef SEQ_KEY
 #undef SEQ_STR

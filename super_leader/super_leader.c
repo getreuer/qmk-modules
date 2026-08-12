@@ -193,25 +193,29 @@ bool super_leader_seq_starts_with(const uint16_t* keys, bool* partial) {
   return false;
 }
 
-static bool handle_sequence_key(uint16_t keycode, keyrecord_t* record) {
-  if (leader.num_seq >= SUPER_LEADER_MAX_LENGTH) {
-    super_leader_cancel();
-    return true;
-  }
-
-  super_leader_reset_timer();
-  leader.seq[leader.num_seq++] = keycode;
-#ifndef NO_DEBUG
-  if (debug_enable) {
-    dprintf("super_leader: seq = { ");
-    for (int8_t i = 0; i < leader.num_seq; ++i) {
-      dprintf("%s ", get_keycode_string(leader.seq[i]));
-    }
-    dprintf("}\n");
-  }
-#endif  // NO_DEBUG
-
+static bool handle_sequence_key(uint16_t keycode, keyrecord_t* record,
+                                bool append_to_buffer) {
   bool partial_match = false;
+  super_leader_reset_timer();
+
+  if (append_to_buffer) {
+    if (leader.num_seq >= SUPER_LEADER_MAX_LENGTH) {
+      super_leader_cancel();
+      return true;
+    }
+
+    leader.seq[leader.num_seq++] = keycode;
+#ifndef NO_DEBUG
+    if (debug_enable) {
+      dprintf("super_leader: seq = { ");
+      for (int8_t i = 0; i < leader.num_seq; ++i) {
+        dprintf("%s ", get_keycode_string(leader.seq[i]));
+      }
+      dprintf("}\n");
+    }
+#endif  // NO_DEBUG
+  }
+
   for (uint16_t i = 0; i < super_leader_sequence_count(); ++i) {
     const super_leader_sequence_t* entry = super_leader_sequence_get(i);
     if (match_sequence(entry->keys)) {
@@ -260,19 +264,25 @@ static bool handle_sequence_key(uint16_t keycode, keyrecord_t* record) {
   return false;
 }
 
+bool super_leader_sequence_active(void) { return leader.state == STATE_ACTIVE; }
+
 void super_leader_start(void) {
-  super_leader_cancel();
-  leader.state = STATE_ACTIVE;
-  leader.num_seq = 0;
-  leader.num_matched = 0;
-  leader.record.event = MAKE_KEYEVENT(0, 0, true);
-  leader.record.keycode = KC_NO;
-  leader.match.fn = NULL;
-  leader.match.param.keycode = KC_NO;
-  memset(leader.seq, 0, SUPER_LEADER_MAX_LENGTH * sizeof(uint16_t));
-  super_leader_reset_timer();
-  dprintf("super_leader: Started.\n");
-  super_leader_start_user();
+  const bool already_active = leader.state == STATE_ACTIVE;
+  if (!already_active) {
+    super_leader_cancel();
+    leader.state = STATE_ACTIVE;
+    leader.num_seq = 0;
+    leader.num_matched = 0;
+    leader.record.event = MAKE_KEYEVENT(0, 0, true);
+    leader.record.keycode = KC_NO;
+    leader.match.fn = NULL;
+    leader.match.param.keycode = KC_NO;
+    memset(leader.seq, 0, SUPER_LEADER_MAX_LENGTH * sizeof(uint16_t));
+    dprintf("super_leader: Started.\n");
+    super_leader_start_user();
+  }
+
+  handle_sequence_key(LEADER, NULL, already_active);
 }
 
 void super_leader_cancel(void) {
@@ -292,34 +302,33 @@ void super_leader_reset_timer(void) {
 
 void super_leader_add(uint16_t keycode) {
   if (leader.state == STATE_ACTIVE) {
-    handle_sequence_key(keycode, NULL);
+    handle_sequence_key(keycode, NULL, true);
   }
 }
 
 bool process_record_super_leader(uint16_t keycode, keyrecord_t* record) {
   if (leader.state == STATE_RECURSING || is_layer_key(keycode, record)) {
     return true;
-  } else if (leader.state == STATE_KEY_HELD) {
-    if (!record->event.pressed &&
+  } else if (!record->event.pressed) {
+    if (leader.state == STATE_KEY_HELD &&
         KEYEQ(record->event.key, leader.record.event.key)) {
       process_output_event(leader.match.param.keycode, false);
       return false;
     }
-    return true;
-  } else if (keycode == LEADER) {
-    if (record->event.pressed) {
+    return keycode != LEADER;
+  } else if (leader.state != STATE_ACTIVE) {
+    if (keycode == LEADER) {
       super_leader_start();
       leader.record.event.key = record->event.key;
+      return false;
     }
-    return false;
-  } else if (leader.state != STATE_ACTIVE || !record->event.pressed) {
     return true;
   }
 
 #ifndef SUPER_LEADER_STRICT_KEY_PROCESSING
   keycode = get_tap_keycode(keycode);
 #endif  // SUPER_LEADER_STRICT_KEY_PROCESSING
-  return handle_sequence_key(keycode, record);
+  return handle_sequence_key(keycode, record, true);
 }
 
 void housekeeping_task_super_leader(void) {

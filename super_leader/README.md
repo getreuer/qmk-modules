@@ -2,7 +2,7 @@
 
 <table>
 <tr><td><b>Module</b></td><td><tt>getreuer/super_leader</tt></td></tr>
-<tr><td><b>Version</b></td><td>2026-08-07</td></tr>
+<tr><td><b>Version</b></td><td>2026-08-11</td></tr>
 <tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
 <tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
 <tr><td><b>Documentation</b></td><td>
@@ -40,6 +40,14 @@ SEQ_KEY(v,   (KC_V),             C(KC_V))
 SEQ_KEY(dfu, (KC_D, KC_F, KC_U), QK_BOOT)
 SEQ_STR(me,  (KC_M, KC_E),       "my@email.com")
 SEQ_UNI(thx, (KC_T, KC_H, KC_X), "🙏")
+```
+
+A practical way to fit `LEADER` into a keymap is to assign it in the
+<kbd>,</kbd> comma key position. Then include this in `super_leader.def`:
+
+```c
+// LEADER acts like KC_COMMA, unless there is a longer matching sequence.
+SEQ_KEY(leader_default, (), KC_COMMA)
 ```
 
 Each "`SEQ_*(name, (key1, key2, ...), output)`" line defines a leader sequence.
@@ -98,7 +106,7 @@ programmatically.
 | Function                         | Description                             |
 |----------------------------------|-----------------------------------------|
 | `super_leader_sequence_active()` | Whether a leader sequence is active.    |
-| `super_leader_start()`           | Begins the leader sequence.             |
+| `super_leader_start()`           | Taps `LEADER`, beginning a sequence.    |
 | `super_leader_cancel()`          | Cancels the leader sequence, if active. |
 | `super_leader_reset_timer()`     | Resets the leader sequence timer.       |
 | `super_leader_add(kc)`           | Adds a key to the sequence buffer.      |

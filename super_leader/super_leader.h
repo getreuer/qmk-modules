@@ -58,12 +58,11 @@ extern "C" {
 // Getting convenient sequence definitions takes some macro shenanigans:
 // * The "CHOOSER" macro selects between 1-arg and 2-arg definitions of a macro
 //   based on the number of input args, emulating function overloading.
-// * The "UNPAREN" macro is used to remove the parentheses () surrounding
-//   the sequence keys, so that we can use them in defining an array.
+// * The "ARRAY" macro defines a 0-terminated array from the given sequence.
 
 #define SUPER_LEADER_CHOOSER_(_1, _2, NAME, ...) NAME
-#define SUPER_LEADER_UNPAREN1_(...) __VA_ARGS__
-#define SUPER_LEADER_UNPAREN_(keys_) SUPER_LEADER_UNPAREN1_ keys_
+#define SUPER_LEADER_ARRAY1_(...) {__VA_ARGS__ __VA_OPT__(, ) 0}
+#define SUPER_LEADER_ARRAY_(keys_) SUPER_LEADER_ARRAY1_ keys_
 
 #define SUPER_LEADER_KEY(kc_)                                \
   (super_leader_output_t) {                                  \
@@ -90,9 +89,9 @@ extern "C" {
     }                                                                 \
   }
 
-#define SUPER_LEADER_SEQ_STARTS_WITH(keys_, partial_) \
-  super_leader_seq_starts_with(                       \
-      (const uint16_t[]){SUPER_LEADER_UNPAREN_(keys_), 0}, (partial_))
+#define SUPER_LEADER_SEQ_STARTS_WITH(keys_, partial_)                        \
+  super_leader_seq_starts_with((const uint16_t[])SUPER_LEADER_ARRAY_(keys_), \
+                               (partial_))
 
 enum { SUPER_LEADER_END = KC_NO };
 
@@ -121,7 +120,10 @@ void super_leader_add_user(const uint16_t* seq, uint8_t num_seq, bool* partial);
 /** Whether a leader sequence is active. */
 bool super_leader_sequence_active(void);
 
-/** Begins the leader sequence. */
+/**
+ * Taps the LEADER key, beginning the leader sequence. Or if a sequence is
+ * already active, LEADER is added to the sequence buffer.
+ */
 void super_leader_start(void);
 
 /** Cancels the leader sequence, if active. */
@@ -133,6 +135,16 @@ void super_leader_add(uint16_t keycode);
 /** Resets the leader sequence timer. */
 void super_leader_reset_timer(void);
 
+/**
+ * Indicates that a sequence has matched and sets its output.
+ *
+ * Use one of the SUPER_LEADER_*() macros to construct the argument:
+ *
+ *     super_leader_set_match(SUPER_LEADER_KEY(kc));
+ *     super_leader_set_match(SUPER_LEADER_STR("string"));
+ *     super_leader_set_match(SUPER_LEADER_UNI("unicode"));
+ *     super_leader_set_match(SUPER_LEADER_FUN(fun, user_data));
+ */
 void super_leader_set_match(super_leader_output_t output);
 
 // Used internally by Super Leader macros.
