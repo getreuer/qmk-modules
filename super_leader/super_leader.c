@@ -264,8 +264,6 @@ static bool handle_sequence_key(uint16_t keycode, keyrecord_t* record,
   return false;
 }
 
-bool super_leader_sequence_active(void) { return leader.state == STATE_ACTIVE; }
-
 void super_leader_start(void) {
   const bool already_active = leader.state == STATE_ACTIVE;
   if (!already_active) {
