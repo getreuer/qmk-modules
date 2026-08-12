@@ -306,6 +306,10 @@ void super_leader_add(uint16_t keycode) {
   }
 }
 
+bool super_leader_sequence_active(void) {
+  return leader.state == STATE_ACTIVE;
+}
+
 bool process_record_super_leader(uint16_t keycode, keyrecord_t* record) {
   if (leader.state == STATE_RECURSING || is_layer_key(keycode, record)) {
     return true;
