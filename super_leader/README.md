@@ -2,7 +2,7 @@
 
 <table>
 <tr><td><b>Module</b></td><td><tt>getreuer/super_leader</tt></td></tr>
-<tr><td><b>Version</b></td><td>2026-08-11</td></tr>
+<tr><td><b>Version</b></td><td>2026-08-20</td></tr>
 <tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
 <tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
 <tr><td><b>Documentation</b></td><td>

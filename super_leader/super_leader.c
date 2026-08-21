@@ -136,6 +136,18 @@ static void super_leader_finish(void) {
     return;
   }
 
+  const uint8_t saved_mods = get_mods();
+#ifndef NO_ACTION_ONESHOT
+  const uint8_t saved_oneshot_mods = get_oneshot_mods();
+#endif  // NO_ACTION_ONESHOT
+  if (leader.num_seq > leader.num_matched) {
+    clear_mods();
+#ifndef NO_ACTION_ONESHOT
+    clear_oneshot_mods();
+#endif  // NO_ACTION_ONESHOT
+    send_keyboard_report();
+  }
+
   if (have_full_match()) {
     set_finished_state();
 
@@ -151,19 +163,34 @@ static void super_leader_finish(void) {
   for (uint8_t i = leader.num_matched; i < leader.num_seq; ++i) {
     process_output_tap(leader.seq[i]);
   }
+
+  if (leader.num_seq > leader.num_matched) {
+    set_mods(saved_mods);
+#ifndef NO_ACTION_ONESHOT
+    set_oneshot_mods(saved_oneshot_mods);
+#endif  // NO_ACTION_ONESHOT
+    send_keyboard_report();
+  }
 }
 
-static bool is_layer_key(uint16_t keycode, keyrecord_t* record) {
+// Returns true if this key event should be ignored by the
+// process_record_super_leader() handler.
+static bool is_ignored_key(uint16_t keycode, keyrecord_t* record) {
   switch (keycode) {
-#ifndef NO_ACTION_TAPPING
-    case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
-      return record->tap.count == 0;
-#endif  // NO_ACTION_TAPPING
     case QK_MOMENTARY ... QK_MOMENTARY_MAX:
     case QK_TO ... QK_TO_MAX:
     case QK_TOGGLE_LAYER ... QK_TOGGLE_LAYER_MAX:
     case QK_LAYER_TAP_TOGGLE ... QK_LAYER_TAP_TOGGLE_MAX:
+#ifndef NO_ACTION_TAPPING
+    case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+    case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+      return record->tap.count == 0;
+#endif  // NO_ACTION_TAPPING
+#ifndef NO_ACTION_ONESHOT
     case QK_ONE_SHOT_LAYER ... QK_ONE_SHOT_LAYER_MAX:
+    case QK_ONE_SHOT_MOD ... QK_ONE_SHOT_MOD_MAX:
+#endif  // NO_ACTION_ONESHOT
+    case MODIFIER_KEYCODE_RANGE:
       return true;
   }
   return false;
@@ -193,28 +220,32 @@ bool super_leader_seq_starts_with(const uint16_t* keys, bool* partial) {
   return false;
 }
 
-static bool handle_sequence_key(uint16_t keycode, keyrecord_t* record,
-                                bool append_to_buffer) {
+// Appends a key to the buffer. Returns true on success, false if full.
+static bool append_to_buffer(uint16_t keycode, keyrecord_t* record) {
+  if (leader.num_seq >= SUPER_LEADER_MAX_LENGTH) {
+    super_leader_cancel();
+    return false;
+  }
+
+  leader.seq[leader.num_seq++] = keycode;
+#ifndef NO_DEBUG
+  if (debug_enable) {
+    dprintf("super_leader: seq = { ");
+    for (int8_t i = 0; i < leader.num_seq; ++i) {
+      dprintf("%s ", get_keycode_string(leader.seq[i]));
+    }
+    dprintf("}\n");
+  }
+#endif  // NO_DEBUG
+
+  return true;
+}
+
+// Searches for a matching leader sequence. Returns whether default handling
+// should continue for this key event.
+static bool find_sequence(uint16_t keycode, keyrecord_t* record) {
   bool partial_match = false;
   super_leader_reset_timer();
-
-  if (append_to_buffer) {
-    if (leader.num_seq >= SUPER_LEADER_MAX_LENGTH) {
-      super_leader_cancel();
-      return true;
-    }
-
-    leader.seq[leader.num_seq++] = keycode;
-#ifndef NO_DEBUG
-    if (debug_enable) {
-      dprintf("super_leader: seq = { ");
-      for (int8_t i = 0; i < leader.num_seq; ++i) {
-        dprintf("%s ", get_keycode_string(leader.seq[i]));
-      }
-      dprintf("}\n");
-    }
-#endif  // NO_DEBUG
-  }
 
   for (uint16_t i = 0; i < super_leader_sequence_count(); ++i) {
     const super_leader_sequence_t* entry = super_leader_sequence_get(i);
@@ -236,7 +267,12 @@ static bool handle_sequence_key(uint16_t keycode, keyrecord_t* record,
     leader.record.event.key = record->event.key;
   }
 
-  if (!partial_match) {
+  const uint8_t active_mods = (get_mods()
+#ifndef NO_ACTION_ONESHOT
+                               | get_oneshot_mods()
+#endif  // NO_ACTION_ONESHOT
+  );
+  if (!partial_match || active_mods) {
     if (leader.num_matched == leader.num_seq) {
       // Current key completed a sequence unambiguously.
       if (leader.match.fn == NULL && record) {
@@ -252,8 +288,25 @@ static bool handle_sequence_key(uint16_t keycode, keyrecord_t* record,
         super_leader_finish();
       }
     } else {  // Current key follows a (possibly failed) leader sequence.
+      const uint8_t saved_mods = get_mods();
+#ifndef NO_ACTION_ONESHOT
+      const uint8_t saved_oneshot_mods = get_oneshot_mods();
+#endif  // NO_ACTION_ONESHOT
+      clear_mods();
+#ifndef NO_ACTION_ONESHOT
+      clear_oneshot_mods();
+#endif  // NO_ACTION_ONESHOT
+      send_keyboard_report();
+
       --leader.num_seq;
       super_leader_finish();
+
+      set_mods(saved_mods);
+#ifndef NO_ACTION_ONESHOT
+      set_oneshot_mods(saved_oneshot_mods);
+#endif  // NO_ACTION_ONESHOT
+      send_keyboard_report();
+
       if (!record) {
         process_output_tap(keycode);
       }
@@ -264,9 +317,8 @@ static bool handle_sequence_key(uint16_t keycode, keyrecord_t* record,
   return false;
 }
 
-void super_leader_start(void) {
-  const bool already_active = leader.state == STATE_ACTIVE;
-  if (!already_active) {
+bool super_leader_start_internal(keyrecord_t* record) {
+  if (leader.state != STATE_ACTIVE) {
     super_leader_cancel();
     leader.state = STATE_ACTIVE;
     leader.num_seq = 0;
@@ -278,9 +330,11 @@ void super_leader_start(void) {
     memset(leader.seq, 0, SUPER_LEADER_MAX_LENGTH * sizeof(uint16_t));
     dprintf("super_leader: Started.\n");
     super_leader_start_user();
+  } else {
+    append_to_buffer(LEADER, record);
   }
 
-  handle_sequence_key(LEADER, NULL, already_active);
+  return find_sequence(LEADER, record);
 }
 
 void super_leader_cancel(void) {
@@ -298,18 +352,15 @@ void super_leader_reset_timer(void) {
   leader.timer = timer_read() + SUPER_LEADER_TIMEOUT;
 }
 
-void super_leader_add(uint16_t keycode) {
-  if (leader.state == STATE_ACTIVE) {
-    handle_sequence_key(keycode, NULL, true);
-  }
+bool super_leader_add_internal(uint16_t keycode, keyrecord_t* record) {
+  return leader.state != STATE_ACTIVE || !append_to_buffer(keycode, record) ||
+         find_sequence(keycode, record);
 }
 
-bool super_leader_sequence_active(void) {
-  return leader.state == STATE_ACTIVE;
-}
+bool super_leader_sequence_active(void) { return leader.state == STATE_ACTIVE; }
 
 bool process_record_super_leader(uint16_t keycode, keyrecord_t* record) {
-  if (leader.state == STATE_RECURSING || is_layer_key(keycode, record)) {
+  if (leader.state == STATE_RECURSING || is_ignored_key(keycode, record)) {
     return true;
   } else if (!record->event.pressed) {
     if (leader.state == STATE_KEY_HELD &&
@@ -320,9 +371,7 @@ bool process_record_super_leader(uint16_t keycode, keyrecord_t* record) {
     return keycode != LEADER;
   } else if (leader.state != STATE_ACTIVE) {
     if (keycode == LEADER) {
-      super_leader_start();
-      leader.record.event.key = record->event.key;
-      return false;
+      return super_leader_start_internal(record);
     }
     return true;
   }
@@ -330,7 +379,7 @@ bool process_record_super_leader(uint16_t keycode, keyrecord_t* record) {
 #ifndef SUPER_LEADER_STRICT_KEY_PROCESSING
   keycode = get_tap_keycode(keycode);
 #endif  // SUPER_LEADER_STRICT_KEY_PROCESSING
-  return handle_sequence_key(keycode, record, true);
+  return super_leader_add_internal(keycode, record);
 }
 
 void housekeeping_task_super_leader(void) {

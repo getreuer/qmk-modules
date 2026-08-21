@@ -112,6 +112,9 @@ typedef struct {
 
 extern super_leader_sequence_t super_leader_sequences[];
 
+bool super_leader_start_internal(keyrecord_t* record);
+bool super_leader_add_internal(uint16_t keycode, keyrecord_t* record);
+
 // Optional user callbacks.
 void super_leader_start_user(void);
 void super_leader_end_user(bool successful_match);
@@ -124,13 +127,17 @@ bool super_leader_sequence_active(void);
  * Taps the LEADER key, beginning the leader sequence. Or if a sequence is
  * already active, LEADER is added to the sequence buffer.
  */
-void super_leader_start(void);
+static inline void super_leader_start(void) {
+  (void)super_leader_start_internal(NULL);
+}
 
 /** Cancels the leader sequence, if active. */
 void super_leader_cancel(void);
 
 /** Adds a key to the sequence buffer. */
-void super_leader_add(uint16_t keycode);
+static inline void super_leader_add(uint16_t keycode) {
+  (void)super_leader_add_internal(keycode, NULL);
+}
 
 /** Resets the leader sequence timer. */
 void super_leader_reset_timer(void);
