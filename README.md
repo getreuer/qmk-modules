@@ -9,7 +9,6 @@
 | [Achordion](./achordion/)                 | Customize the tap-hold decision.                      |
 | [Custom Shift Keys](./custom_shift_keys/) | Customize what keycode is produced when shifted.      |
 | [Cyclotab](./cyclotab/)                   | A swapper implementation for easier Alt+Tabbing.      |
-| [Keycode String](./keycode_string/)       | Format QMK keycodes as human-readable strings.        |
 | [Lumino](./lumino/)                       | An opinionated RGB matrix lighting control scheme.    |
 | [Mouse Turbo Click](./mouse_turbo_click/) | Click the mouse rapidly.                              |
 | [Orbital Mouse](./orbital_mouse/)         | A polar approach to mouse key control.                |
@@ -18,8 +17,20 @@
 | [Sentence Case](./sentence_case/)         | Automatically capitalize sentences.                   |
 | [SOCD Cleaner](./socd_cleaner/)           | SOCD filtering for fast gaming inputs.                |
 | [Super Leader](./super_leader/)           | A snappy leader key with concise definitions.         |
-| [Speculative Hold](./speculative_hold/)   | Apply mod-tap mods immediately on key down.           |
-| [Tap Flow](./tap_flow/)                   | Disable HRMs during fast typing (Global Quick Tap).   |
+
+The following were originally developed as userspace implementations and have
+since graduated to become built-in QMK core features. It is recommended to use
+the QMK core features, but perhaps for sake of customization or curiosity, you
+may use these module versions:
+
+| Module                                    | Description                                                             |
+|-------------------------------------------|-------------------------------------------------------------------------|
+| [Caps Word](./caps_word/)                 | Capitalize until the end of the word, modern replacement for Caps Lock. |
+| [Keycode String](./keycode_string/)       | Format QMK keycodes as human-readable strings.                          |
+| [Layer Lock](./layer_lock/)               | Key that toggles the current layer on until it is pressed again.        |
+| [Repeat Key](./repeat_key/)               | Repeat (and "alt" repeat) the last pressed key.                         |
+| [Speculative Hold](./speculative_hold/)   | Apply mod-tap mods immediately on key down.                             |
+| [Tap Flow](./tap_flow/)                   | Disable HRMs during fast typing (Global Quick Tap).                     |
 
 
 ## What is this?
