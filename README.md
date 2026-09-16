@@ -25,6 +25,7 @@ may use these module versions:
 
 | Module                                    | Description                                                             |
 |-------------------------------------------|-------------------------------------------------------------------------|
+| [Autocorrection](./autocorrection/)       | Automatically correct typos.                                            |
 | [Caps Word](./caps_word/)                 | Capitalize until the end of the word, modern replacement for Caps Lock. |
 | [Keycode String](./keycode_string/)       | Format QMK keycodes as human-readable strings.                          |
 | [Layer Lock](./layer_lock/)               | Key that toggles the current layer on until it is pressed again.        |
