@@ -61,12 +61,22 @@ static uint16_t random_release_delay(void) {
 }
 #  endif
 
+// All pending transitions are owned by this module. A count avoids scanning
+// every pair in idle housekeeping without imposing a fixed pair-count limit.
+static uint32_t delayed_release_pending_count;
+
 static void cancel_delayed_release(socd_cleaner_t* state, uint8_t index) {
-  state->delayed_release_pending[index] = false;
+  if (state->delayed_release_pending[index]) {
+    state->delayed_release_pending[index] = false;
+    --delayed_release_pending_count;
+  }
 }
 
 static void schedule_delayed_release(socd_cleaner_t* state, uint8_t index) {
-  state->delayed_release_pending[index] = true;
+  if (!state->delayed_release_pending[index]) {
+    state->delayed_release_pending[index] = true;
+    ++delayed_release_pending_count;
+  }
   state->delayed_release_timer[index] = timer_read();
 #  ifdef SOCD_CLEANER_RELEASE_DELAY_MAX_MS
   // Stir in the event timing at no additional timer-read cost.
@@ -85,6 +95,7 @@ static void cancel_all_delayed_releases(void) {
     state->delayed_release_pending[0] = false;
     state->delayed_release_pending[1] = false;
   }
+  delayed_release_pending_count = 0;
 }
 #endif
 
@@ -237,7 +248,7 @@ bool process_record_socd_cleaner(uint16_t keycode, keyrecord_t* record) {
 
 #ifdef SOCD_CLEANER_RELEASE_DELAY_MIN_MS
 void housekeeping_task_socd_cleaner(void) {
-  if (!socd_cleaner_enabled) {
+  if (!socd_cleaner_enabled || delayed_release_pending_count == 0) {
     return;
   }
 
@@ -262,7 +273,7 @@ void housekeeping_task_socd_cleaner(void) {
         continue;
       }
 
-      state->delayed_release_pending[key] = false;
+      cancel_delayed_release(state, key);
 
       // A physical release cancels the pending synthetic release before this
       // task runs. Only release a key that is still physically held.
