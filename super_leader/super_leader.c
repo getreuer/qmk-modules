@@ -36,6 +36,10 @@ ASSERT_COMMUNITY_MODULES_MIN_API_VERSION(1, 0, 0);
 #define SUPER_LEADER_MAX_LENGTH 5
 #endif  // SUPER_LEADER_MAX_LENGTH
 
+void super_leader_call_fun0(void* fun_ptr) {
+  ((void (*)(void))fun_ptr)();
+}
+
 void super_leader_send_string(void* user_data) {
   send_string_P((const char*)user_data);
 }

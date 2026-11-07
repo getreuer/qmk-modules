@@ -71,11 +71,19 @@ extern "C" {
 #define SUPER_LEADER_FUN(...)                             \
   SUPER_LEADER_CHOOSER_(__VA_ARGS__, SUPER_LEADER_FUN_2_, \
                         SUPER_LEADER_FUN_1_)(__VA_ARGS__)
-#define SUPER_LEADER_FUN_1_(fn_) SUPER_LEADER_FUN_2_(fn_, NULL)
 #define SUPER_LEADER_FUN_2_(fn_, data_)                                  \
   (super_leader_output_t) {                                              \
     (fn_), (super_leader_output_param_t) { .user_data = (void*)(data_) } \
   }
+#ifndef __cplusplus
+#define SUPER_LEADER_IS_FUN0_(fn_) \
+  __builtin_types_compatible_p(__typeof__(&*(fn_)), void (*)(void))
+#define SUPER_LEADER_FUN_1_(fn_)                                      \
+  SUPER_LEADER_FUN_2_(                                                \
+      __builtin_choose_expr(SUPER_LEADER_IS_FUN0_(fn_),               \
+                            super_leader_call_fun0, (fn_)),           \
+      __builtin_choose_expr(SUPER_LEADER_IS_FUN0_(fn_), (fn_), NULL))
+#endif  // __cplusplus
 #define SUPER_LEADER_STR(str)                                 \
   (super_leader_output_t) {                                   \
     super_leader_send_string, (super_leader_output_param_t) { \
@@ -104,7 +112,7 @@ typedef struct {
   void (*fn)(void*);
   super_leader_output_param_t param;
 } super_leader_output_t;
-
+;
 typedef struct {
   const uint16_t* keys;
   super_leader_output_t output;
@@ -155,10 +163,26 @@ void super_leader_reset_timer(void);
 void super_leader_set_match(super_leader_output_t output);
 
 // Used internally by Super Leader macros.
+void super_leader_call_fun0(void* fun_ptr);
 void super_leader_send_string(void* user_data);
 void super_leader_send_unicode_string(void* user_data);
 bool super_leader_seq_starts_with(const uint16_t* keys, bool* partial);
 
 #ifdef __cplusplus
+}  // extern "C"
+
+extern "C++" {
+inline super_leader_output_t super_leader_make_fun_(void (*fn)(void)) {
+  super_leader_output_t out = {super_leader_call_fun0, {0}};
+  out.param.user_data = reinterpret_cast<void*>(fn);
+  return out;
 }
-#endif
+inline super_leader_output_t super_leader_make_fun_(void (*fn)(void*)) {
+  super_leader_output_t out = {fn, {0}};
+  out.param.user_data = nullptr;
+  return out;
+}
+}  // extern "C++"
+#define SUPER_LEADER_FUN_1_(fn_) super_leader_make_fun_(fn_)
+#endif // __cplusplus
+
