@@ -1,8 +1,8 @@
 # Super Leader
 
 <table>
-<tr><td><b>Module</b></td><td><tt>getreuer/super_leader</tt></td></tr>
-<tr><td><b>Version</b></td><td>2026-08-20</td></tr>
+<tr><td><b>Module</b></td><td><tt>getreuer/super\_leader</tt></td></tr>
+<tr><td><b>Version</b></td><td>2026-11-06</td></tr>
 <tr><td><b>Maintainer</b></td><td>Pascal Getreuer (@getreuer)</td></tr>
 <tr><td><b>License</b></td><td><a href="../LICENSE.txt">Apache 2.0</a></td></tr>
 <tr><td><b>Documentation</b></td><td>
@@ -76,8 +76,8 @@ Leader sequences may be up to maximum of 5 keys in length, not counting the
 leader key itself (configurable with `SUPER_LEADER_MAX_LENGTH`).
 
 When evaluating the sequence, tap-hold keys are reduced to their tapping
-keycode. E.g. the sequence definition `SUPER_LEADER((KC_D, KC_F, KC_U),
-QK_BOOT)` matches even when the <kbd>F</kbd> key is actually a mod-tap like
+keycode. E.g. the sequence definition `SEQ_KEY(dfu, (KC_D, KC_F, KC_U),
+QK_BOOT)` matches even when the <kbd>F</kbd> key is actually a mod-tap key like
 `LSFT_T(KC_F)`.
 
 ## Customization
@@ -110,7 +110,6 @@ programmatically.
 | `super_leader_cancel()`          | Cancels the leader sequence, if active. |
 | `super_leader_reset_timer()`     | Resets the leader sequence timer.       |
 | `super_leader_add(kc)`           | Adds a key to the sequence buffer.      |
-
 
 See the [Super Leader
 documentation](https://getreuer.info/posts/keyboards/super-leader) for further
