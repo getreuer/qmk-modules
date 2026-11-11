@@ -50,6 +50,32 @@
 
 #include "quantum.h"
 
+#if defined(SOCD_CLEANER_RELEASE_DELAY_MAX_MS) && !defined(SOCD_CLEANER_RELEASE_DELAY_MIN_MS)
+#  error "SOCD_CLEANER_RELEASE_DELAY_MAX_MS requires SOCD_CLEANER_RELEASE_DELAY_MIN_MS"
+#endif
+
+#if defined(SOCD_CLEANER_RELEASE_DELAY_MIN_MS) && \
+    (SOCD_CLEANER_RELEASE_DELAY_MIN_MS < 0 || SOCD_CLEANER_RELEASE_DELAY_MIN_MS > 1000)
+#  error "SOCD_CLEANER_RELEASE_DELAY_MIN_MS must be between 0 and 1000"
+#endif
+
+#if defined(SOCD_CLEANER_RELEASE_DELAY_MAX_MS) && \
+    (SOCD_CLEANER_RELEASE_DELAY_MAX_MS < SOCD_CLEANER_RELEASE_DELAY_MIN_MS || \
+     SOCD_CLEANER_RELEASE_DELAY_MAX_MS > 1000)
+#  error "SOCD_CLEANER_RELEASE_DELAY_MAX_MS must be between MIN_MS and 1000"
+#endif
+
+#if defined(SOCD_CLEANER_RELEASE_DELAY_MAX_MS) && \
+    SOCD_CLEANER_RELEASE_DELAY_MAX_MS == SOCD_CLEANER_RELEASE_DELAY_MIN_MS
+#  undef SOCD_CLEANER_RELEASE_DELAY_MAX_MS
+#endif
+
+#if defined(SOCD_CLEANER_RELEASE_DELAY_MIN_MS) && \
+    SOCD_CLEANER_RELEASE_DELAY_MIN_MS == 0 && \
+    !defined(SOCD_CLEANER_RELEASE_DELAY_MAX_MS)
+#  undef SOCD_CLEANER_RELEASE_DELAY_MIN_MS
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -73,6 +99,13 @@ typedef struct {
   uint8_t keys[2];  // Basic keycodes for the two opposing keys.
   uint8_t resolution;  // Resolution strategy.
   bool held[2];  // Tracks which keys are physically held.
+#ifdef SOCD_CLEANER_RELEASE_DELAY_MIN_MS
+  bool delayed_release_pending[2];  // Pending artificial release per key.
+  uint16_t delayed_release_timer[2];  // QMK timer timestamp per key.
+#  ifdef SOCD_CLEANER_RELEASE_DELAY_MAX_MS
+  uint16_t delayed_release_delay[2];  // Random delay selected per release.
+#  endif
+#endif
 } socd_cleaner_t;
 
 /** Determines globally whether SOCD cleaner is enabled. */

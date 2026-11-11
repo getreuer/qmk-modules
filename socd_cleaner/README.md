@@ -46,6 +46,55 @@ These lines specify that SOCD filtering is to be performed on the WASD keys
 priority resolution (`SOCD_CLEANER_LAST`). If you want to do something else,
 this is where to change that.
 
+### Optional mouse cursor support
+
+Mouse cursor directions can be used as opposing pairs when the module's mouse
+support is explicitly enabled in `config.h`:
+
+```c
+#define SOCD_CLEANER_MOUSEKEY_ENABLE
+```
+
+For example:
+
+```c
+socd_cleaner_t socd_opposing_pairs[] = {
+  {{MS_UP, MS_DOWN}, SOCD_CLEANER_LAST},
+  {{MS_LEFT, MS_RGHT}, SOCD_CLEANER_LAST},
+};
+```
+
+When `SOCD_CLEANER_MOUSEKEY_ENABLE` is not defined, the mouse-specific code is
+not compiled. The current mouse event is left to QMK's normal processing; the
+module only synthesizes the opposing mouse cursor key when SOCD resolution
+requires it.
+
+### Optional release delay for `SOCD_CLEANER_LAST`
+
+The synthetic release of the previously active **keyboard** key can optionally
+be delayed while the newly pressed key is still processed immediately. For a
+fixed delay, define only the minimum in `config.h`:
+
+```c
+#define SOCD_CLEANER_RELEASE_DELAY_MIN_MS 20
+```
+
+For a pseudo-random delay range, also define a maximum:
+
+```c
+#define SOCD_CLEANER_RELEASE_DELAY_MIN_MS 2
+#define SOCD_CLEANER_RELEASE_DELAY_MAX_MS 30
+```
+
+The random range is inclusive. Equal minimum and maximum values are treated as
+a fixed delay. Delay values must be between 0 and 1000 ms; defining `MAX_MS`
+without `MIN_MS`, or a maximum below the minimum, fails at compile time. A
+fixed minimum of `0` disables the feature completely.
+
+The implementation uses QMK's 16-bit `timer_read()` / `timer_elapsed()` API.
+Mouse cursor directions never use this delay; with mouse support enabled they
+retain the normal immediate SOCD behavior.
+
 Resolution strategies:
 
 * `SOCD_CLEANER_LAST`: (Recommended) Last input priority with reactivation. The
